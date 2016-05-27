@@ -1,4 +1,4 @@
-package com.profesorfalken.jsensors;
+package com.profesorfalken.jsensors.unix;
 
 import com.sun.jna.Native;
 import com.sun.jna.ptr.DoubleByReference;

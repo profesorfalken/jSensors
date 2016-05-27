@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.profesorfalken.jsensors;
+package com.profesorfalken.jsensors.unix;
 
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
