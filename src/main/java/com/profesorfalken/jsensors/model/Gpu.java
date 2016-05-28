@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.profesorfalken.jsensors;
+package com.profesorfalken.jsensors.model;
 
 /**
  *
  * @author javier
  */
-public interface HardwareSensors {
-    
+public class Gpu {
+    public final Sensors sensors;
+
+    public Gpu(Sensors sensors) {
+        this.sensors = sensors;
+    }
 }

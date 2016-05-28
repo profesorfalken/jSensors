@@ -5,7 +5,9 @@
  */
 package com.profesorfalken.jsensors;
 
+import com.profesorfalken.jsensors.model.Components;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,14 +16,18 @@ import java.util.List;
 public enum JSensors {
     get;
     
-    private HardwareSensors sensorData;
+    private Components hardwareComponents;
     
     private JSensors(){
         
     }
     
-    public HardwareSensors refresh() {
-        return this.sensorData;
+    public JSensors config(Map<String, String> config) {
+        return this;
+    }
+    
+    public Components refresh() {
+        return this.hardwareComponents;
     }
     
     public JSensors free() {

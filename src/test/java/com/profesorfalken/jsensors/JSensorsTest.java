@@ -5,7 +5,9 @@
  */
 package com.profesorfalken.jsensors;
 
-import java.util.List;
+import com.profesorfalken.jsensors.model.Cpu;
+import com.profesorfalken.jsensors.model.Fan;
+import com.profesorfalken.jsensors.model.Temperature;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,72 +41,34 @@ public class JSensorsTest {
     }
 
     /**
-     * Test of values method, of class JSensors.
+     * Test Cpu information
      */
     @Test
-    public void testValues() {
-        System.out.println("values");
-        JSensors[] expResult = null;
-        JSensors[] result = JSensors.values();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of valueOf method, of class JSensors.
-     */
-    @Test
-    public void testValueOf() {
-        System.out.println("valueOf");
-        String name = "";
-        JSensors expResult = null;
-        JSensors result = JSensors.valueOf(name);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of refresh method, of class JSensors.
-     */
-    @Test
-    public void testRefresh() {
-        System.out.println("refresh");
-        JSensors instance = null;
-        HardwareSensors expResult = null;
-        HardwareSensors result = instance.refresh();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of free method, of class JSensors.
-     */
-    @Test
-    public void testFree() {
-        System.out.println("free");
-        JSensors instance = null;
-        JSensors expResult = null;
-        JSensors result = instance.free();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of warnings method, of class JSensors.
-     */
-    @Test
-    public void testWarnings() {
-        System.out.println("warnings");
-        JSensors instance = null;
-        List<String> expResult = null;
-        List<String> result = instance.warnings();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
+    public void testCpu() {
+        System.out.println("Testing CPU sensors");
+        
+        Cpu cpu = JSensors.get.refresh().cpu;
+        
+        //Test temperature sensors (in C)
+        for (final Temperature temp : cpu.sensors.temperatures) {
+            assertNotNull("Temperature should not be null", temp);
+            assertNotNull("Temperature value should not be null", temp.value);
+            assertTrue("Temperature value should be greater than 0, but was "
+                    + temp.value, temp.value > 0);
+            assertTrue("Temperature value should be lower than 120, but was "
+                    + temp.value, temp.value < 120);
+            System.out.println("Temperature: " + temp.value);            
+        }
+        
+        //Test Fan speed sensors (in RPM)
+        for (final Fan fan : cpu.sensors.fans) {
+            assertNotNull("Fan should not be null", fan);
+            assertNotNull("Fan RPM should not be null", fan.value);
+            assertTrue("Fan RPM should be greater than 0, but was "
+                    + fan.value, fan.value > 0);
+            assertTrue("Fan RPM value should be lower than 120, but was "
+                    + fan.value, fan.value < 120);
+            System.out.println("Fan RPM: " + fan.value);            
+        }
+    }    
 }
