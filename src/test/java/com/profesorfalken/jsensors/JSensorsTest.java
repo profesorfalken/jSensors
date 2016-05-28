@@ -47,7 +47,8 @@ public class JSensorsTest {
     public void testCpu() {
         System.out.println("Testing CPU sensors");
         
-        Cpu cpu = JSensors.get.refresh().cpu;
+        //Get CPU component
+        Cpu cpu = JSensors.get.components().cpu;
         
         //Test temperature sensors (in C)
         for (final Temperature temp : cpu.sensors.temperatures) {

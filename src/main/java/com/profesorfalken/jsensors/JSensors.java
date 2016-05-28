@@ -26,7 +26,11 @@ public enum JSensors {
         return this;
     }
     
-    public Components refresh() {
+    public JSensors noRefresh() {
+        return this;
+    }
+    
+    public Components components() {
         return this.hardwareComponents;
     }
     

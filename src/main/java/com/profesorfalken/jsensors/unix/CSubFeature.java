@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author javier
  */
-public class CSubFeature extends Structure {
+class CSubFeature extends Structure {
 
     public String name;
     public int number;

@@ -6,7 +6,6 @@
 package com.profesorfalken.jsensors.unix;
 
 import com.sun.jna.Library;
-import com.sun.jna.Pointer;
 import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import java.io.File;
@@ -15,7 +14,7 @@ import java.io.File;
  *
  * @author javier
  */
-public interface CSensors extends Library {
+interface CSensors extends Library {
 
     public int sensors_init(File input);
 
