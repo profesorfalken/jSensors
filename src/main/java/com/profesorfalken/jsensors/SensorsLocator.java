@@ -5,7 +5,10 @@
  */
 package com.profesorfalken.jsensors;
 
+import com.profesorfalken.jsensors.manager.SensorsManager;
+import com.profesorfalken.jsensors.manager.unix.UnixSensorsManager;
 import com.profesorfalken.jsensors.model.Components;
+import com.profesorfalken.jsensors.util.OSDetector;
 
 /**
  *
@@ -15,6 +18,20 @@ enum SensorsLocator {
     get;
     
     Components getComponents() {
-        return null;
+        return getManager().getComponents();
+    }
+    
+    Components getComponents(SensorsManager manager) {
+        return manager.getComponents();
+    }
+    
+    private static SensorsManager getManager() {
+        if (OSDetector.isWindows()) {
+            return null;
+        } else if (OSDetector.isUnix()) {
+            return new UnixSensorsManager();
+        }
+        throw new UnsupportedOperationException(
+                "Sorry, but your Operating System is not supported by jSensors");
     }
 }

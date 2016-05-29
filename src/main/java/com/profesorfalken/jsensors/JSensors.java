@@ -5,6 +5,7 @@
  */
 package com.profesorfalken.jsensors;
 
+import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.profesorfalken.jsensors.model.Components;
 import java.util.List;
 import java.util.Map;
@@ -16,28 +17,30 @@ import java.util.Map;
 public enum JSensors {
     get;
     
-    private Components hardwareComponents;
+    Map<String, String> baseConfig = null;
+    Map<String, String> usedConfig = null;
     
     private JSensors(){
+        //Load config from file
+    }
+    
+    public JSensors config(Map<String, String> config) {                
+        //Override config
         
-    }
-    
-    public JSensors config(Map<String, String> config) {
-        return this;
-    }
-    
-    public JSensors noRefresh() {
         return this;
     }
     
     public Components components() {
-        SensorsLocator.get.getComponents();
+        Components components = SensorsLocator.get.getComponents();
         
-        return this.hardwareComponents;
+        //Reset config
+        this.usedConfig = this.baseConfig;
+        
+        return components;
     }
     
-    public JSensors free() {
-        return this;
+    Components components(SensorsManager manager) {
+        return SensorsLocator.get.getComponents(manager);
     }
     
     public List<String> warnings() {

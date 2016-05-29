@@ -5,13 +5,17 @@
  */
 package com.profesorfalken.jsensors.manager;
 
+import com.profesorfalken.jsensors.model.Components;
+
 /**
  *
  * @author javier
  */
-public abstract class SensorsManager {
+public abstract class SensorsManager {    
     
     protected abstract String getSensorsData();
     
-    
+    public Components getComponents() {
+        return null;
+    }
 }

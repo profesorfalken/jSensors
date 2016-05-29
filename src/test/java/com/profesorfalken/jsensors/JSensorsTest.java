@@ -8,6 +8,8 @@ package com.profesorfalken.jsensors;
 import com.profesorfalken.jsensors.model.Cpu;
 import com.profesorfalken.jsensors.model.Fan;
 import com.profesorfalken.jsensors.model.Temperature;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,6 +41,12 @@ public class JSensorsTest {
     @After
     public void tearDown() {
     }
+    
+    private JSensors getJSensorsStub() {
+        Map<String, String> config = new HashMap<String, String>();
+        config.put("testMode", "STUB");
+        return JSensors.get.config(config);
+    }
 
     /**
      * Test Cpu information
@@ -48,7 +56,7 @@ public class JSensorsTest {
         System.out.println("Testing CPU sensors");
         
         //Get CPU component
-        Cpu cpu = JSensors.get.components().cpu;
+        Cpu cpu = getJSensorsStub().components().cpu;
         
         //Test temperature sensors (in C)
         for (final Temperature temp : cpu.sensors.temperatures) {
