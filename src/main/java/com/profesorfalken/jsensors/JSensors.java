@@ -31,6 +31,8 @@ public enum JSensors {
     }
     
     public Components components() {
+        SensorsLocator.get.getComponents();
+        
         return this.hardwareComponents;
     }
     

@@ -10,9 +10,11 @@ package com.profesorfalken.jsensors.model;
  * @author javier
  */
 public class Cpu {
+    public final String name;
     public final Sensors sensors;
 
-    public Cpu(Sensors sensors) {
+    public Cpu(String name, Sensors sensors) {
+        this.name = name;
         this.sensors = sensors;
     }
 }
