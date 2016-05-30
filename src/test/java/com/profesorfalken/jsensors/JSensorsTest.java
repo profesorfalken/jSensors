@@ -51,7 +51,7 @@ public class JSensorsTest {
     /**
      * Test Cpu information
      */
-    @Test
+    //@Test
     public void testCpu() {
         System.out.println("Testing CPU sensors");
         

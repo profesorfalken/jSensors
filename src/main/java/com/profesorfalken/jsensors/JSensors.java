@@ -43,6 +43,10 @@ public enum JSensors {
         return SensorsLocator.get.getComponents(manager);
     }
     
+    public static void main(String[] args) {
+        Components components = SensorsLocator.get.getComponents();
+    }
+    
     public List<String> warnings() {
         return null;
     }

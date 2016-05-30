@@ -13,7 +13,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.profesorfalken.jsensors.TestSensorsLinux</mainClass>
+                            <mainClass>com.profesorfalken.jsensors.JSensors</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

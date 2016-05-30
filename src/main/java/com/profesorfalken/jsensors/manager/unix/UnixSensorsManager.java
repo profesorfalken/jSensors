@@ -26,7 +26,7 @@ public class UnixSensorsManager extends SensorsManager {
         int init = initCSensors(cSensors);
         if (init != 0) {
             //TODO: handle
-        }
+        }                
 
         return normalizeSensorsData(cSensors);
     }
@@ -46,7 +46,20 @@ public class UnixSensorsManager extends SensorsManager {
 
         for (final CChip chip : chips) {
             sensorsData.append(chip);
+            
+            List<CFeature> features = features(cSensors, chip);
+            
+            for (final CFeature feature : features) {
+                sensorsData.append(feature);
+                
+                List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
+                for (final CSubFeature subFeature : subFeatures) {
+                    sensorsData.append(subFeature);
+                }
+            }
         }
+        
+        System.out.println(sensorsData.toString());
 
         return sensorsData.toString();
     }
