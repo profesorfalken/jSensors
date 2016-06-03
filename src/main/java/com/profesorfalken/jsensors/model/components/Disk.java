@@ -12,9 +12,11 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  * @author javier
  */
 public class Disk {
+    public final String name;
     public final Sensors sensors;
 
-    public Disk(Sensors sensors) {
+    public Disk(String name, Sensors sensors) {
+        this.name = name;
         this.sensors = sensors;
     }
 }

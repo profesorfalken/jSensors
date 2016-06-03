@@ -12,9 +12,11 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  * @author javier
  */
 public class Gpu {
+    public final String name;
     public final Sensors sensors;
 
-    public Gpu(Sensors sensors) {
+    public Gpu(String name, Sensors sensors) {
+        this.name = name;
         this.sensors = sensors;
     }
 }

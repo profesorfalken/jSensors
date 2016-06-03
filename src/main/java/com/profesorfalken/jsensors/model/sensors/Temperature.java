@@ -10,9 +10,10 @@ package com.profesorfalken.jsensors.model.sensors;
  * @author javier
  */
 public class Temperature {
+    public String name;
     public final Double value;
 
-    public Temperature(Double value) {
+    public Temperature(String name, Double value) {
         this.value = value;
     }
 }
