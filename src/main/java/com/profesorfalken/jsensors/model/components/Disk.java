@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.profesorfalken.jsensors.model;
+package com.profesorfalken.jsensors.model.components;
+
+import com.profesorfalken.jsensors.model.sensors.Sensors;
 
 /**
  *
  * @author javier
  */
-public class Cpu {
-    public final String name;
+public class Disk {
     public final Sensors sensors;
 
-    public Cpu(String name, Sensors sensors) {
-        this.name = name;
+    public Disk(Sensors sensors) {
         this.sensors = sensors;
     }
 }

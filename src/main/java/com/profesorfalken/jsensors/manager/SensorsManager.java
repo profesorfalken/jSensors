@@ -5,7 +5,7 @@
  */
 package com.profesorfalken.jsensors.manager;
 
-import com.profesorfalken.jsensors.model.Components;
+import com.profesorfalken.jsensors.model.components.Components;
 
 /**
  *

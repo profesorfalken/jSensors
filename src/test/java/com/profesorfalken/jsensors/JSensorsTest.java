@@ -5,9 +5,9 @@
  */
 package com.profesorfalken.jsensors;
 
-import com.profesorfalken.jsensors.model.Cpu;
-import com.profesorfalken.jsensors.model.Fan;
-import com.profesorfalken.jsensors.model.Temperature;
+import com.profesorfalken.jsensors.model.components.Cpu;
+import com.profesorfalken.jsensors.model.sensors.Fan;
+import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.After;

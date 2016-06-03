@@ -7,7 +7,7 @@ package com.profesorfalken.jsensors;
 
 import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.profesorfalken.jsensors.manager.unix.UnixSensorsManager;
-import com.profesorfalken.jsensors.model.Components;
+import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.util.OSDetector;
 
 /**

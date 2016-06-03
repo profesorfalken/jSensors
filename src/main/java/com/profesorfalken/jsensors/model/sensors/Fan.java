@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.profesorfalken.jsensors.model;
+package com.profesorfalken.jsensors.model.sensors;
 
 /**
  *
  * @author javier
  */
-public class Temperature {
+public class Fan {
     public final Double value;
 
-    public Temperature(Double value) {
+    public Fan(Double value) {
         this.value = value;
     }
 }
