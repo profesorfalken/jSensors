@@ -17,34 +17,32 @@ import java.util.Map;
 public enum JSensors {
     get;
     
-    Map<String, String> baseConfig = null;
+    final Map<String, String> baseConfig;
+    
     Map<String, String> usedConfig = null;
     
     private JSensors(){
         //Load config from file
+        baseConfig = SensorsConfig.getConfigMap();
     }
     
     public JSensors config(Map<String, String> config) {                
         //Override config
+        this.usedConfig = this.baseConfig;        
+        for (final Map.Entry<String, String> entry : config.entrySet()) {
+            this.usedConfig.put(entry.getKey(), entry.getValue());
+        }
         
         return this;
     }
     
     public Components components() {
-        Components components = SensorsLocator.get.getComponents();
+        Components components = SensorsLocator.get.getComponents(this.usedConfig);
         
         //Reset config
         this.usedConfig = this.baseConfig;
         
         return components;
-    }
-    
-    Components components(SensorsManager manager) {
-        return SensorsLocator.get.getComponents(manager);
-    }
-    
-    public static void main(String[] args) {
-        Components components = SensorsLocator.get.getComponents();
     }
     
     public List<String> warnings() {

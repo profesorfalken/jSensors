@@ -14,6 +14,7 @@ public class Temperature {
     public final Double value;
 
     public Temperature(String name, Double value) {
+        this.name = name;
         this.value = value;
     }
 }

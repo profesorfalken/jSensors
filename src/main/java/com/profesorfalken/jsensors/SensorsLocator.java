@@ -6,9 +6,11 @@
 package com.profesorfalken.jsensors;
 
 import com.profesorfalken.jsensors.manager.SensorsManager;
+import com.profesorfalken.jsensors.manager.stub.StubSensorsManager;
 import com.profesorfalken.jsensors.manager.unix.UnixSensorsManager;
 import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.util.OSDetector;
+import java.util.Map;
 
 /**
  *
@@ -17,15 +19,15 @@ import com.profesorfalken.jsensors.util.OSDetector;
 enum SensorsLocator {
     get;
     
-    Components getComponents() {
-        return getManager().getComponents();
-    }
+    Components getComponents(Map<String, String> config) {
+        return getManager(config).getComponents();
+    }    
     
-    Components getComponents(SensorsManager manager) {
-        return manager.getComponents();
-    }
-    
-    private static SensorsManager getManager() {
+    private static SensorsManager getManager(Map<String, String> config) {
+        if ("STUB".equals(config.get("testMode"))) {
+            return new StubSensorsManager(config.get("stubContent"));
+        }
+        
         if (OSDetector.isWindows()) {
             return null;
         } else if (OSDetector.isUnix()) {

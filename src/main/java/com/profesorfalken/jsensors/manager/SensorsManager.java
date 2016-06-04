@@ -30,7 +30,7 @@ public abstract class SensorsManager {
 
         String rawSensorsData = getSensorsData();
 
-        String[] componentsData = rawSensorsData.split("[COMPONENT]");
+        String[] componentsData = rawSensorsData.split("\\[COMPONENT\\]\n");
 
         for (final String componentData : componentsData) {
             if (componentData.startsWith("CPU")) {
