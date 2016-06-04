@@ -20,12 +20,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author javier
  */
 public class JSensorsTest {
+    Logger logger = LoggerFactory.getLogger(JSensorsTest.class);
     
     private static final String TESTSET_1 = "testset_1.jsensor";
     
@@ -42,6 +45,7 @@ public class JSensorsTest {
     
     @Before
     public void setUp() {
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
     }
     
     @After
@@ -76,7 +80,7 @@ public class JSensorsTest {
      */
     @Test
     public void testCpu() throws Exception{
-        System.out.println("Testing CPU sensors");
+        logger.info("Testing CPU sensors");
         
         //Get CPU component
         Cpu cpu = getJSensorsStub(TESTSET_1).components().cpu;
@@ -84,6 +88,7 @@ public class JSensorsTest {
         assertNotNull("Cannot recover CPU data", cpu);
         
         assertNotNull("No CPU name", cpu.name);
+        logger.info("CPU name: " + cpu.name);
         
         //Test temperature sensors (in C)
         for (final Temperature temp : cpu.sensors.temperatures) {
@@ -93,7 +98,7 @@ public class JSensorsTest {
                     + temp.value, temp.value > 0);
             assertTrue("Temperature value should be lower than 120, but was "
                     + temp.value, temp.value < 120);
-            System.out.println("Temperature: " + temp.value);            
+            logger.info("Temperature: " + temp.value);            
         }
         
         //Test Fan speed sensors (in RPM)
@@ -104,7 +109,7 @@ public class JSensorsTest {
                     + fan.value, fan.value > 0);
             assertTrue("Fan RPM value should be lower than 5000, but was "
                     + fan.value, fan.value < 5000);
-            System.out.println("Fan RPM: " + fan.value);            
+            logger.info("Fan RPM: " + fan.value);            
         }
     }    
 }

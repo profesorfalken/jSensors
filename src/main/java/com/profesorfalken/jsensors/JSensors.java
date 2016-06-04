@@ -5,7 +5,6 @@
  */
 package com.profesorfalken.jsensors;
 
-import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.profesorfalken.jsensors.model.components.Components;
 import java.util.List;
 import java.util.Map;
