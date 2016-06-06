@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author javier
  */
-class CBus extends Structure {
+public class CBus extends Structure {
 
     public short type;
     public short nr;

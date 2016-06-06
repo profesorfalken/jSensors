@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author javier
  */
-class CChip extends Structure {
+public class CChip extends Structure {
 
     public String prefix;
     public CBus bus;

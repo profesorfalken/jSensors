@@ -6,7 +6,7 @@
 package com.profesorfalken.jsensors;
 
 import com.profesorfalken.jsensors.model.components.Components;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +45,19 @@ public enum JSensors {
     }
 
     public Components components() {
+        if (this.usedConfig == null) {
+            this.usedConfig = new HashMap<String, String>();
+        }
+        
         Components components = SensorsLocator.get.getComponents(this.usedConfig);
 
         //Reset config
         this.usedConfig = this.baseConfig;
 
         return components;
+    }
+    
+    public static void main(String[] args) {
+        JSensors.get.components();
     }
 }
