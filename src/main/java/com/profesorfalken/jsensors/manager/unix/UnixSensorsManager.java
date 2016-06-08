@@ -67,7 +67,7 @@ public class UnixSensorsManager extends SensorsManager {
             List<CFeature> features = features(cSensors, chip);
             
             for (final CFeature feature : features) {
-                sensorsData.append(cSensors.sensors_get_label(chip, feature)).append(": ").append(LINE_BREAK);                
+                sensorsData.append(cSensors.sensors_get_label(chip, feature)).append(": ").append(LINE_BREAK);
                 
                 List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
                 for (final CSubFeature subFeature : subFeatures) {
