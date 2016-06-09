@@ -8,6 +8,7 @@ package com.profesorfalken.jsensors.manager.unix;
 import com.profesorfalken.jsensors.JSensors;
 import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.sun.jna.Native;
+import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,22 +57,34 @@ public class UnixSensorsManager extends SensorsManager {
 
         for (final CChip chip : chips) {          
             sensorsData.append("[COMPONENT]").append(LINE_BREAK);
+            sensorsData.append("Type: ").append(chip.bus.type).append(LINE_BREAK);            
+            sensorsData.append("Address: ").append(chip.addr).append(LINE_BREAK);
+            sensorsData.append("Path: ").append(chip.path).append(LINE_BREAK);
+            sensorsData.append("Prefix: ").append(chip.prefix).append(LINE_BREAK);
             
             if (chip.bus != null && chip.bus.type == 1) {
                 sensorsData.append("CPU").append(LINE_BREAK);
                 sensorsData.append("Label: ")
                         .append(cSensors.sensors_get_adapter_name(chip.bus))
-                        .append(LINE_BREAK);
+                        .append(LINE_BREAK);                
             }
             
             List<CFeature> features = features(cSensors, chip);
             
             for (final CFeature feature : features) {
-                sensorsData.append(cSensors.sensors_get_label(chip, feature)).append(": ").append(LINE_BREAK);
+                sensorsData.append("Feature type: ").append(feature.type).append(LINE_BREAK);
+                sensorsData.append("Feature name: ").append(feature.name).append(LINE_BREAK);
+                sensorsData.append("Feature label: ").append(cSensors.sensors_get_label(chip, feature)).append(LINE_BREAK);                
                 
                 List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
                 for (final CSubFeature subFeature : subFeatures) {
-                    sensorsData.append(subFeature);
+                    sensorsData.append("SubFeature type: ").append(subFeature.type).append(LINE_BREAK);
+                    sensorsData.append("SubFeature name: ").append(subFeature.name).append(LINE_BREAK);
+                    
+                    double value = 0.0;
+                    DoubleByReference pValue = new DoubleByReference(value);
+                    int returnValue = cSensors.sensors_get_value(chip, subFeature.number, pValue);
+                    sensorsData.append("SubFeature value: ").append(pValue.getValue()).append(LINE_BREAK);   
                 }
             }
         }
@@ -87,7 +100,6 @@ public class UnixSensorsManager extends SensorsManager {
         CChip foundChip;
         int numSensor = 0;
         while ((foundChip = cSensors.sensors_get_detected_chips(null, new IntByReference(numSensor))) != null) {
-            System.out.println("Found chip: " + foundChip);
             detectedChips.add(foundChip);
             numSensor++;
         }
