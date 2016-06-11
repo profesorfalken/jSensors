@@ -1,5 +1,9 @@
-package com.profesorfalken.jsensors.manager.unix;
+package com.profesorfalken.jsensors;
 
+import com.profesorfalken.jsensors.manager.unix.jna.CSubFeature;
+import com.profesorfalken.jsensors.manager.unix.jna.CChip;
+import com.profesorfalken.jsensors.manager.unix.jna.CFeature;
+import com.profesorfalken.jsensors.manager.unix.jna.CSensors;
 import com.sun.jna.Native;
 import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.profesorfalken.jsensors.manager.unix;
+package com.profesorfalken.jsensors.manager.unix.jna;
 
 import com.sun.jna.Structure;
 import java.util.Arrays;
@@ -13,17 +13,14 @@ import java.util.List;
  *
  * @author javier
  */
-public class CFeature extends Structure {
+public class CBus extends Structure {
 
-    public String name;
-    public int number;
-    public int type;
-    public int first_subfeature;
-    public int padding;
+    public short type;
+    public short nr;
 
     @Override
     protected List getFieldOrder() {
-        return Arrays.asList("name", "number", "type", "first_subfeature", "padding");
+        return Arrays.asList("type", "nr");
     }
 
 }

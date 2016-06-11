@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.profesorfalken.jsensors.manager.unix;
+package com.profesorfalken.jsensors.manager.unix.jna;
 
 import com.sun.jna.Library;
 import com.sun.jna.ptr.DoubleByReference;
@@ -14,7 +14,7 @@ import java.io.File;
  *
  * @author javier
  */
-interface CSensors extends Library {
+public interface CSensors extends Library {
 
     public int sensors_init(File input);
 
