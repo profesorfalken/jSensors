@@ -6,6 +6,8 @@
 package com.profesorfalken.jsensors;
 
 import com.profesorfalken.jsensors.model.components.Cpu;
+import com.profesorfalken.jsensors.model.components.Disk;
+import com.profesorfalken.jsensors.model.components.Gpu;
 import com.profesorfalken.jsensors.model.sensors.Fan;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.io.BufferedReader;
@@ -77,6 +79,7 @@ public class JSensorsTest {
 
     /**
      * Test Cpu information
+     * @throws java.lang.Exception
      */
     @Test
     public void testCpu() throws Exception{
@@ -103,6 +106,84 @@ public class JSensorsTest {
         
         //Test Fan speed sensors (in RPM)
         for (final Fan fan : cpu.sensors.fans) {
+            assertNotNull("Fan should not be null", fan);
+            assertNotNull("Fan RPM should not be null", fan.value);
+            assertTrue("Fan RPM should be greater than 0, but was "
+                    + fan.value, fan.value > 0);
+            assertTrue("Fan RPM value should be lower than 5000, but was "
+                    + fan.value, fan.value < 5000);
+            logger.info("Fan RPM: " + fan.value);            
+        }
+    }    
+    
+    /**
+     * Test Gpu information
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGpu() throws Exception{
+        logger.info("Testing GPU sensors");
+        
+        //Get GPU component
+        Gpu gpu = getJSensorsStub(TESTSET_1).components().gpu;
+        
+        assertNotNull("Cannot recover GPU data", gpu);
+        
+        assertNotNull("No GPU name", gpu.name);
+        logger.info("GPU name: " + gpu.name);
+        
+        //Test temperature sensors (in C)
+        for (final Temperature temp : gpu.sensors.temperatures) {
+            assertNotNull("Temperature should not be null", temp);
+            assertNotNull("Temperature value should not be null", temp.value);
+            assertTrue("Temperature value should be greater than 0, but was "
+                    + temp.value, temp.value > 0);
+            assertTrue("Temperature value should be lower than 120, but was "
+                    + temp.value, temp.value < 120);
+            logger.info("Temperature: " + temp.value);            
+        }
+        
+        //Test Fan speed sensors (in RPM)
+        for (final Fan fan : gpu.sensors.fans) {
+            assertNotNull("Fan should not be null", fan);
+            assertNotNull("Fan RPM should not be null", fan.value);
+            assertTrue("Fan RPM should be greater than 0, but was "
+                    + fan.value, fan.value > 0);
+            assertTrue("Fan RPM value should be lower than 5000, but was "
+                    + fan.value, fan.value < 5000);
+            logger.info("Fan RPM: " + fan.value);            
+        }
+    }    
+    
+    /**
+     * Test Disk information
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testDisk() throws Exception{
+        logger.info("Testing CPU sensors");
+        
+        //Get Disk component
+        Disk disk = getJSensorsStub(TESTSET_1).components().disk;
+        
+        assertNotNull("Cannot recover Disk data", disk);
+        
+        assertNotNull("No Disk name", disk.name);
+        logger.info("Disk name: " + disk.name);
+        
+        //Test temperature sensors (in C)
+        for (final Temperature temp : disk.sensors.temperatures) {
+            assertNotNull("Temperature should not be null", temp);
+            assertNotNull("Temperature value should not be null", temp.value);
+            assertTrue("Temperature value should be greater than 0, but was "
+                    + temp.value, temp.value > 0);
+            assertTrue("Temperature value should be lower than 120, but was "
+                    + temp.value, temp.value < 120);
+            logger.info("Temperature: " + temp.value);            
+        }
+        
+        //Test Fan speed sensors (in RPM)
+        for (final Fan fan : disk.sensors.fans) {
             assertNotNull("Fan should not be null", fan);
             assertNotNull("Fan RPM should not be null", fan.value);
             assertTrue("Fan RPM should be greater than 0, but was "

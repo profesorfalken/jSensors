@@ -29,8 +29,8 @@ public class UnixSensorsManager extends SensorsManager {
 
     private static final String LINE_BREAK = "\n";
     
-    private StringBuilder sensorsData = new StringBuilder();
-    private StringBuilder sensorsDebugData = new StringBuilder();
+    private final StringBuilder sensorsData = new StringBuilder();
+    private final StringBuilder sensorsDebugData = new StringBuilder();
 
     public String getSensorsData() {
         CSensors cSensors = loadDynamicLibrary();
@@ -68,7 +68,7 @@ public class UnixSensorsManager extends SensorsManager {
     }
     
     private void addDebugData(String debugData) {
-        sensorsDebugData.append(debugData);
+        sensorsDebugData.append(debugData).append(LINE_BREAK);
     }
 
     private String normalizeSensorsData(CSensors cSensors) {
@@ -119,7 +119,7 @@ public class UnixSensorsManager extends SensorsManager {
                 List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
                 for (final CSubFeature subFeature : subFeatures) {
                     addDebugData(String.format("SubFeature type: %d", subFeature.type));
-                    addDebugData(String.format("SubFeature name: %s", feature.name));                    
+                    addDebugData(String.format("SubFeature name: %s", subFeature.name));                    
 
                     double value = 0.0;
                     DoubleByReference pValue = new DoubleByReference(value);                    
@@ -128,7 +128,7 @@ public class UnixSensorsManager extends SensorsManager {
 
                         if (subFeature.name.endsWith("_input")) {
                             addData(String.format("%s", pValue.getValue()));                     
-                            break;
+                            //break;
                         }
                     } else {
                         addData(String.format("could not retrieve value"));                     
