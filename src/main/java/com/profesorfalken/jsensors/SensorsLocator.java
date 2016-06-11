@@ -24,14 +24,19 @@ enum SensorsLocator {
     }    
     
     private static SensorsManager getManager(Map<String, String> config) {
+        boolean debugMode = false;
+        if ("true".equals(config.get("debugMode"))) {
+            debugMode = true;
+        }
+        
         if ("STUB".equals(config.get("testMode"))) {
-            return new StubSensorsManager(config.get("stubContent"));
+            return new StubSensorsManager(config.get("stubContent")).debugMode(debugMode);
         }
         
         if (OSDetector.isWindows()) {
             return null;
         } else if (OSDetector.isUnix()) {
-            return new UnixSensorsManager();
+            return new UnixSensorsManager().debugMode(debugMode);
         }
         throw new UnsupportedOperationException(
                 "Sorry, but your Operating System is not supported by jSensors");

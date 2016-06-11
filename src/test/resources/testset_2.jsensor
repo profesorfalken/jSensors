@@ -1,0 +1,15 @@
+[COMPONENT]
+CPU
+Label: Pentium G3258 @ 3200Mhz
+Temp Core 1: 25.0
+Temp Core 2: 25.0
+Fan 1: 850
+[COMPONENT]
+GPU
+Label: MSI Nvidia 750 Ti
+Temp: 32.5
+Fan 1: 998
+[COMPONENT]
+DISK
+Label: Seagate 1GB
+Temp: 31.0

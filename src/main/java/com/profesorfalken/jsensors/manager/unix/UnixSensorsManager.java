@@ -20,24 +20,28 @@ import org.slf4j.LoggerFactory;
  * @author javier
  */
 public class UnixSensorsManager extends SensorsManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UnixSensorsManager.class);
-    
+
     private static final String LINE_BREAK = "\n";
+    
+    private StringBuilder sensorsData = new StringBuilder();
+    private StringBuilder sensorsDebugData = new StringBuilder();
 
     public String getSensorsData() {
         CSensors cSensors = loadDynamicLibrary();
-        if (cSensors == null) {            
+        if (cSensors == null) {
             LOGGER.error("Could not load sensors dynamic library");
-            
+
             //TODO: handle
         }
 
         int init = initCSensors(cSensors);
         if (init != 0) {
             LOGGER.error("Cannot initialize sensors");
-            
+
             //TODO: handle
-        }                
+        }
 
         return normalizeSensorsData(cSensors);
     }
@@ -52,43 +56,68 @@ public class UnixSensorsManager extends SensorsManager {
     }
 
     private String normalizeSensorsData(CSensors cSensors) {
-        StringBuilder sensorsData = new StringBuilder();
+        
         List<CChip> chips = detectedChips(cSensors);
 
-        for (final CChip chip : chips) {          
+        for (final CChip chip : chips) {
             sensorsData.append("[COMPONENT]").append(LINE_BREAK);
-            sensorsData.append("Type: ").append(chip.bus.type).append(LINE_BREAK);            
-            sensorsData.append("Address: ").append(chip.addr).append(LINE_BREAK);
-            sensorsData.append("Path: ").append(chip.path).append(LINE_BREAK);
-            sensorsData.append("Prefix: ").append(chip.prefix).append(LINE_BREAK);
-            
-            if (chip.bus != null && chip.bus.type == 1) {
-                sensorsData.append("CPU").append(LINE_BREAK);
-                sensorsData.append("Label: ")
-                        .append(cSensors.sensors_get_adapter_name(chip.bus))
-                        .append(LINE_BREAK);                
+            sensorsDebugData.append("Type: ").append(chip.bus.type).append(LINE_BREAK);
+            sensorsDebugData.append("Address: ").append(chip.addr).append(LINE_BREAK);
+            sensorsDebugData.append("Path: ").append(chip.path).append(LINE_BREAK);
+            sensorsDebugData.append("Prefix: ").append(chip.prefix).append(LINE_BREAK);
+
+            if (chip.bus != null) {
+                switch (chip.bus.type) {
+                    case 1:
+                        sensorsData.append("CPU").append(LINE_BREAK);
+                        break;
+                    case 2:
+                        sensorsData.append("GPU").append(LINE_BREAK);
+                        break;
+                    case 4:
+                    case 5:
+                        sensorsData.append("DISK").append(LINE_BREAK);
+                        break;
+                    default:
+                        sensorsData.append("UNKNOWN").append(LINE_BREAK);
+                }
+
             }
-            
+            sensorsData.append("Label: ")
+                    .append(cSensors.sensors_get_adapter_name(chip.bus))
+                    .append(LINE_BREAK);
+
             List<CFeature> features = features(cSensors, chip);
-            
+
             for (final CFeature feature : features) {
-                sensorsData.append("Feature type: ").append(feature.type).append(LINE_BREAK);
-                sensorsData.append("Feature name: ").append(feature.name).append(LINE_BREAK);
-                sensorsData.append("Feature label: ").append(cSensors.sensors_get_label(chip, feature)).append(LINE_BREAK);                
+                sensorsDebugData.append("Feature type: ").append(feature.type).append(LINE_BREAK);
+                sensorsDebugData.append("Feature name: ").append(feature.name).append(LINE_BREAK);
+                sensorsDebugData.append("Feature label: ").append(cSensors.sensors_get_label(chip, feature)).append(LINE_BREAK);
                 
+                if (feature.name.startsWith("temp")) {
+                    sensorsData.append("Temp ").append(cSensors.sensors_get_label(chip, feature)).append(":");
+                } else if (feature.name.startsWith("fan")) {
+                    sensorsData.append("Fan ").append(cSensors.sensors_get_label(chip, feature)).append(":");
+                }
+
                 List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
                 for (final CSubFeature subFeature : subFeatures) {
-                    sensorsData.append("SubFeature type: ").append(subFeature.type).append(LINE_BREAK);
-                    sensorsData.append("SubFeature name: ").append(subFeature.name).append(LINE_BREAK);
-                    
+                    sensorsDebugData.append("SubFeature type: ").append(subFeature.type).append(LINE_BREAK);
+                    sensorsDebugData.append("SubFeature name: ").append(subFeature.name).append(LINE_BREAK);
+
                     double value = 0.0;
                     DoubleByReference pValue = new DoubleByReference(value);
                     int returnValue = cSensors.sensors_get_value(chip, subFeature.number, pValue);
-                    sensorsData.append("SubFeature value: ").append(pValue.getValue()).append(LINE_BREAK);   
+                    sensorsDebugData.append("SubFeature value: ").append(pValue.getValue()).append(LINE_BREAK);
+                    
+                    if (subFeature.name.endsWith("_input")) {
+                        sensorsData.append(pValue.getValue()).append(LINE_BREAK);
+                        break;
+                    }
                 }
             }
         }
-        
+
         System.out.println(sensorsData.toString());
 
         return sensorsData.toString();

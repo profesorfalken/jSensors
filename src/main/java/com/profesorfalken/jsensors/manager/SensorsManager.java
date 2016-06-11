@@ -20,6 +20,13 @@ import java.util.List;
  * @author javier
  */
 public abstract class SensorsManager {
+    
+    protected boolean debugMode = false;
+    
+    public SensorsManager debugMode(boolean mode) {
+        this.debugMode = mode;
+        return this;
+    }
 
     protected abstract String getSensorsData();
 
