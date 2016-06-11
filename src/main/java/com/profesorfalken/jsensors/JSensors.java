@@ -57,7 +57,13 @@ public enum JSensors {
         return components;
     }
     
-    public static void main(String[] args) {
-        JSensors.get.components();
+    public static void main(String[] args) {        
+        Map<String, String> overriddenConfig = new HashMap<String, String>();
+        for (final String arg : args) {
+            if ("--debug".equals(arg)) {
+                overriddenConfig.put("debugMode", "true");
+            }
+        }
+        JSensors.get.config(overriddenConfig).components();
     }
 }
