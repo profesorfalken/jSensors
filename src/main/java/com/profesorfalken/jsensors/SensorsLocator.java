@@ -8,6 +8,7 @@ package com.profesorfalken.jsensors;
 import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.profesorfalken.jsensors.manager.stub.StubSensorsManager;
 import com.profesorfalken.jsensors.manager.unix.UnixSensorsManager;
+import com.profesorfalken.jsensors.manager.windows.WindowsSensorsManager;
 import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.util.OSDetector;
 import java.util.Map;
@@ -34,7 +35,7 @@ enum SensorsLocator {
         }
         
         if (OSDetector.isWindows()) {
-            return null;
+            return new WindowsSensorsManager().debugMode(debugMode);
         } else if (OSDetector.isUnix()) {
             return new UnixSensorsManager().debugMode(debugMode);
         }

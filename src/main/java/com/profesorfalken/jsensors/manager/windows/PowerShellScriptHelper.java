@@ -15,11 +15,12 @@ import java.io.InputStream;
  * @author Javier
  */
 class PowerShellScriptHelper {
+
     static String dllImport() {
         return "[System.Reflection.Assembly]::LoadFile(\"" + dllPath() + "\")"
                 + " | Out-Null";
     }
-    
+
     private static String dllPath() {
         String dllName = "OpenHardwareMonitorLib.dll";
         InputStream in = PowerShellScriptHelper.class.getResourceAsStream(dllName);
@@ -28,8 +29,8 @@ class PowerShellScriptHelper {
             tempFile = File.createTempFile(dllName, "");
             byte[] buffer = new byte[1024];
             int read;
-            FileOutputStream fos = new FileOutputStream(tempFile);            
-            while((read = in.read(buffer)) != -1) {
+            FileOutputStream fos = new FileOutputStream(tempFile);
+            while ((read = in.read(buffer)) != -1) {
                 fos.write(buffer, 0, read);
             }
             fos.close();
@@ -38,15 +39,15 @@ class PowerShellScriptHelper {
             //TODO: handle
             return "";
         }
-        
+
         return tempFile.getAbsolutePath();
     }
-    
+
     static String newComputerInstance() {
         StringBuilder code = new StringBuilder();
-        
+
         code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer");
-        
+
         code.append("$PC.MainboardEnabled = $true");
         code.append("$PC.CPUEnabled = $true");
         code.append("$PC.RAMEnabled = $true");
@@ -56,12 +57,12 @@ class PowerShellScriptHelper {
 
         return code.toString();
     }
-    
+
     static String sensorsQueryLoop() {
         StringBuilder code = new StringBuilder();
-        
+
         code.append("$PC.Open()");
-        
+
         code.append("ForEach ($hw in $PC.Hardware)");
         code.append("{");
         code.append("$hw");
@@ -76,7 +77,7 @@ class PowerShellScriptHelper {
         code.append("Write-Host \"\"");
         code.append("}");
         code.append("}");
-        
+
         return code.toString();
     }
 }
