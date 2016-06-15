@@ -57,7 +57,7 @@ public class JSensorsTest {
     private JSensors getJSensorsStub(String testset) throws IOException {
         Map<String, String> config = new HashMap<String, String>();
         
-        config.put("testMode", "STUB");
+        //config.put("testMode", "STUB");
         
         InputStream is = JSensorsTest.class.getClassLoader().getResourceAsStream(testset);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
