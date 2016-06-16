@@ -20,7 +20,7 @@ class PowerShellScriptHelper {
 
     private static final String LINE_BREAK = "\r\n";
 
-    static String dllImport() {
+    private static String dllImport() {
         return "[System.Reflection.Assembly]::LoadFile(\"" + dllPath() + "\")"
                 + " | Out-Null" + LINE_BREAK;
     }
@@ -47,7 +47,7 @@ class PowerShellScriptHelper {
         return tempFile.getAbsolutePath();
     }
 
-    static String newComputerInstance() {
+    private static String newComputerInstance() {
         StringBuilder code = new StringBuilder();
 
         code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
@@ -62,7 +62,7 @@ class PowerShellScriptHelper {
         return code.toString();
     }
 
-    static String sensorsQueryLoop() {
+    private static String sensorsQueryLoop() {
         StringBuilder code = new StringBuilder();
 
         code.append("$PC.Open()").append(LINE_BREAK);
@@ -85,7 +85,7 @@ class PowerShellScriptHelper {
         return code.toString();
     }
 
-    public static String generateScript() {
+    static String generateScript() {
         File tmpFile = null;
         FileWriter writer = null;
 

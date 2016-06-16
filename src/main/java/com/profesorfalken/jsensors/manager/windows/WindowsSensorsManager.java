@@ -6,6 +6,8 @@
 package com.profesorfalken.jsensors.manager.windows;
 
 import com.profesorfalken.jsensors.manager.SensorsManager;
+import com.profesorfalken.jsensors.manager.unix.jna.CSensors;
+import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +26,14 @@ public class WindowsSensorsManager extends SensorsManager {
 
     public String getSensorsData() {
         //TODO Use PowerShellOperations
+        String rawSensorsData = PowerShellOperations.getRawSensorsData();
         
-        
-                
-        return null;
+        return normalizeSensorsData(rawSensorsData);
     }
     
-   
+    private static String normalizeSensorsData (String rawSensorsData) {
+        System.out.println(rawSensorsData);
+        
+        return "NOTHING";
+    }
 }

@@ -21,16 +21,11 @@ public class PowerShellOperations {
     
     public static String getRawSensorsData() {
         PowerShell powershell = null;
+        String rawData = null;
         try {
             powershell = PowerShell.openSession();
-            //Checks if running as administrator
-            String returnedvalue = powershell.executeCommand("([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")").getCommandOutput();
-            System.out.println("Executed Windows : " + returnedvalue);
-            System.out.println("Executing script:" + PowerShellScriptHelper.generateScript());
-            returnedvalue = powershell.executeCommand(PowerShellScriptHelper.generateScript()).getCommandOutput();
-            System.out.println("After executing script:" + returnedvalue);
-            returnedvalue = powershell.executeCommand(PowerShellScriptHelper.generateScript()).getCommandOutput();
-            System.out.println("After executing script:" + returnedvalue);
+            powershell.executeCommand(PowerShellScriptHelper.generateScript());           
+            rawData = powershell.executeCommand(PowerShellScriptHelper.generateScript()).getCommandOutput();
         } catch (PowerShellNotAvailableException ex) {
             //TODO: Handle error
         } finally  {
@@ -38,6 +33,6 @@ public class PowerShellOperations {
                 powershell.close();
             }
         }   
-        return null;
+        return rawData;
     }
 }
