@@ -20,9 +20,6 @@ public class WindowsSensorsManager extends SensorsManager {
 
     private static final String LINE_BREAK = "\r\n";
 
-    private final StringBuilder sensorsData = new StringBuilder();
-    private final StringBuilder sensorsDebugData = new StringBuilder();
-
     public String getSensorsData() {
         String rawSensorsData = PowerShellOperations.getRawSensorsData();
 
