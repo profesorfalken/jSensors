@@ -35,9 +35,9 @@ public abstract class SensorsManager {
         Gpu gpu = null;
         Disk disk = null;
 
-        String rawSensorsData = getSensorsData();
+        String normalizedSensorsData = getSensorsData();
 
-        String[] componentsData = rawSensorsData.split("\\[COMPONENT\\]\\r?\\n");
+        String[] componentsData = normalizedSensorsData.split("\\[COMPONENT\\]\\r?\\n");
 
         for (final String componentData : componentsData) {
             if (componentData.startsWith("CPU")) {
