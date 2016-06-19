@@ -19,7 +19,7 @@ import com.profesorfalken.jsensors.manager.SensorsManager;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class StubSensorsManager extends SensorsManager {
     private final String stubContent;

@@ -22,7 +22,7 @@ import java.io.File;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public interface CSensors extends Library {
 

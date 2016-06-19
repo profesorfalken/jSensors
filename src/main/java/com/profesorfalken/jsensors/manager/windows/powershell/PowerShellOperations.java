@@ -20,7 +20,7 @@ import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
 
 /**
  *
- * @author Javier
+ * @author Javier Garcia Alonso
  */
 public class PowerShellOperations {
     public static boolean isAdministrator() {

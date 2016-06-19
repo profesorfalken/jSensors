@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class WindowsSensorsManager extends SensorsManager {
 

@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public enum JSensors {
 

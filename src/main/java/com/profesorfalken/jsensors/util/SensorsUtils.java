@@ -23,7 +23,7 @@ import java.io.InputStream;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class SensorsUtils {
     public static String generateLibTmpPath(String libName) {

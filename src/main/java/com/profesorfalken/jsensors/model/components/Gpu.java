@@ -19,7 +19,7 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class Gpu {
     public final String name;

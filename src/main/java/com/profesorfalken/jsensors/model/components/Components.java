@@ -17,7 +17,7 @@ package com.profesorfalken.jsensors.model.components;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class Components {
     public final Cpu cpu;

@@ -17,7 +17,7 @@ package com.profesorfalken.jsensors.manager.unix.jna;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public interface CFeatureType {
     static int SENSORS_FEATURE_IN = 0x00;

@@ -17,7 +17,7 @@ package com.profesorfalken.jsensors.model.sensors;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class Fan {
     public final String name;

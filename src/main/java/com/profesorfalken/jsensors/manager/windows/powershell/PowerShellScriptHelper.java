@@ -23,7 +23,7 @@ import java.util.Date;
 
 /**
  *
- * @author Javier
+ * @author Javier Garcia Alonso
  */
 class PowerShellScriptHelper {
 

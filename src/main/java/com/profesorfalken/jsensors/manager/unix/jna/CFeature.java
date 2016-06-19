@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public class CFeature extends Structure {
 

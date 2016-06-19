@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 enum SensorsLocator {
     get;

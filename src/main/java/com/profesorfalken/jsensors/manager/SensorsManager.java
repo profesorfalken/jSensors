@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  *
- * @author javier
+ * @author Javier Garcia Alonso
  */
 public abstract class SensorsManager {
     
