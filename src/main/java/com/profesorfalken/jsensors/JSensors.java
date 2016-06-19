@@ -15,8 +15,13 @@
  */
 package com.profesorfalken.jsensors;
 
+import com.profesorfalken.jsensors.model.components.Component;
 import com.profesorfalken.jsensors.model.components.Components;
+import com.profesorfalken.jsensors.model.components.Cpu;
+import com.profesorfalken.jsensors.model.sensors.Fan;
+import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +50,7 @@ public enum JSensors {
         this.usedConfig = this.baseConfig;
         for (final Map.Entry<String, String> entry : config.entrySet()) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(String.format("Overriding config entry %s, %s by %s", 
+                LOGGER.debug(String.format("Overriding config entry %s, %s by %s",
                         entry.getKey(), this.usedConfig.get(entry.getKey()), entry.getValue()));
             }
             this.usedConfig.put(entry.getKey(), entry.getValue());
@@ -58,7 +63,7 @@ public enum JSensors {
         if (this.usedConfig == null) {
             this.usedConfig = new HashMap<String, String>();
         }
-        
+
         Components components = SensorsLocator.get.getComponents(this.usedConfig);
 
         //Reset config
@@ -66,14 +71,37 @@ public enum JSensors {
 
         return components;
     }
-    
-    public static void main(String[] args) {        
+
+    public static void main(String[] args) {
         Map<String, String> overriddenConfig = new HashMap<String, String>();
         for (final String arg : args) {
             if ("--debug".equals(arg)) {
                 overriddenConfig.put("debugMode", "true");
             }
         }
-        JSensors.get.config(overriddenConfig).components();
+
+        Components components = JSensors.get.config(overriddenConfig).components();
+
+        Cpu cpu = components.cpu;
+        if (cpu != null) {
+            System.out.println("Found CPU component " + cpu.name);
+            readComponent(cpu);
+        }
+    }
+
+    private static void readComponent(Component component) {
+        if (component.sensors != null) {
+            System.out.println("Sensors: ");
+            
+            List<Temperature> temps = component.sensors.temperatures;            
+            for (final Temperature temp : temps) {
+                System.out.println(temp.name + ": " + temp.value + " C");
+            }
+            
+            List<Fan> fans = component.sensors.fans;            
+            for (final Fan fan : fans) {
+                System.out.println(fan.name + ": " + fan.value + " RPM");
+            }
+        }
     }
 }

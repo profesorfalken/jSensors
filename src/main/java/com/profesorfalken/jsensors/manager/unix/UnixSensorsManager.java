@@ -54,11 +54,11 @@ public class UnixSensorsManager extends SensorsManager {
         Object jnaProxy;
         
         try {
-            jnaProxy = Native.loadLibrary("sensorsdfsf",
+            jnaProxy = Native.loadLibrary("sensors",
                 CSensors.class);
         } catch (UnsatisfiedLinkError err) {
             try {
-                String libPath = SensorsUtils.generateLibTmpPath("libsensors.so.4.3.2");
+                String libPath = SensorsUtils.generateLibTmpPath("/lib/linux/", "libsensors.so.4.3.2");
                 jnaProxy = Native.loadLibrary(libPath,
                     CSensors.class);
                 new File(libPath).delete();

@@ -31,7 +31,7 @@ class PowerShellScriptHelper {
 
     private static String dllImport() {
         return "[System.Reflection.Assembly]::LoadFile(\"" + 
-                SensorsUtils.generateLibTmpPath("OpenHardwareMonitorLib.dll") + 
+                SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll") + 
                 "\")" + 
                 " | Out-Null" + LINE_BREAK;
     }

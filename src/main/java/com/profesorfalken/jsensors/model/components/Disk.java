@@ -21,12 +21,10 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  *
  * @author Javier Garcia Alonso
  */
-public class Disk {
-    public final String name;
-    public final Sensors sensors;
+public class Disk extends Component {
 
     public Disk(String name, Sensors sensors) {
-        this.name = name;
-        this.sensors = sensors;
+        super(name, sensors);
     }
+    
 }

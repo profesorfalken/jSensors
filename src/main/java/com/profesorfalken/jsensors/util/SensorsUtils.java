@@ -27,7 +27,11 @@ import java.io.InputStream;
  */
 public class SensorsUtils {
     public static String generateLibTmpPath(String libName) {
-        InputStream in = UnixSensorsManager.class.getResourceAsStream("/" + libName);
+        return generateLibTmpPath("/", libName);
+    }
+    
+    public static String generateLibTmpPath(String path, String libName) {
+        InputStream in = UnixSensorsManager.class.getResourceAsStream(path + libName);
         File tempFile;
         try {
             tempFile = File.createTempFile(libName, "");
