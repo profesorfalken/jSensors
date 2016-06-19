@@ -98,12 +98,12 @@ public abstract class SensorsManager {
             if (dataLine.startsWith("Temp")) {
                 String[] data = dataLine.split(":");
                 Temperature temperature = new Temperature(data[0].trim(),
-                        Double.valueOf(data[1].trim()));
+                        data[1].trim().length() > 0 ? Double.valueOf(data[1].trim()) : 0.0);
                 temperatures.add(temperature);
             } else if (dataLine.startsWith("Fan")) {
                 String[] data = dataLine.split(":");
                 Fan fan = new Fan(data[0].trim(),
-                        Double.valueOf(data[1].trim()));
+                        data[1].trim().length() > 0 ? Double.valueOf(data[1].trim()) : 0.0);
                 fans.add(fan);
             }
         }

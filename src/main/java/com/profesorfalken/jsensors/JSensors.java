@@ -18,6 +18,8 @@ package com.profesorfalken.jsensors;
 import com.profesorfalken.jsensors.model.components.Component;
 import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.model.components.Cpu;
+import com.profesorfalken.jsensors.model.components.Disk;
+import com.profesorfalken.jsensors.model.components.Gpu;
 import com.profesorfalken.jsensors.model.sensors.Fan;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.util.HashMap;
@@ -86,6 +88,18 @@ public enum JSensors {
         if (cpu != null) {
             System.out.println("Found CPU component " + cpu.name);
             readComponent(cpu);
+        }
+        
+        Gpu gpu = components.gpu;
+        if (gpu != null) {
+            System.out.println("Found GPU component " + gpu.name);
+            readComponent(gpu);
+        }
+        
+        Disk disk = components.disk;
+        if (disk != null) {
+            System.out.println("Found disk component " + disk.name);
+            readComponent(disk);
         }
     }
 

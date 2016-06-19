@@ -34,10 +34,15 @@ public class WindowsSensorsManager extends SensorsManager {
         String rawSensorsData = PowerShellOperations.getRawSensorsData();
 
         if (debugMode) {
-            LOGGER.info(rawSensorsData);
+            LOGGER.info("RawSensorData: " + rawSensorsData);
+        }
+        
+        String normalizedSensorsData = normalizeSensorsData(rawSensorsData);
+        if (debugMode) {
+            LOGGER.info("NormalizeSensorData: " + normalizedSensorsData);
         }
 
-        return normalizeSensorsData(rawSensorsData);
+        return normalizedSensorsData;
     }
 
     private static String normalizeSensorsData(String rawSensorsData) {
