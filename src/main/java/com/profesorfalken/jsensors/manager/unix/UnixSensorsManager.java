@@ -10,13 +10,11 @@ import com.profesorfalken.jsensors.manager.unix.jna.CChip;
 import com.profesorfalken.jsensors.manager.unix.jna.CFeature;
 import com.profesorfalken.jsensors.manager.unix.jna.CSensors;
 import com.profesorfalken.jsensors.manager.SensorsManager;
+import com.profesorfalken.jsensors.util.SensorsUtils;
 import com.sun.jna.Native;
 import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -53,44 +51,24 @@ public class UnixSensorsManager extends SensorsManager {
     }
 
     private CSensors loadDynamicLibrary() {
-        Object jnaProxy = null;
+        Object jnaProxy;
         
         try {
-            jnaProxy = Native.loadLibrary("sensors",
+            jnaProxy = Native.loadLibrary("sensorsdfsf",
                 CSensors.class);
         } catch (UnsatisfiedLinkError err) {
             try {
-                jnaProxy = Native.loadLibrary(libFullPath(),
+                String libPath = SensorsUtils.generateLibTmpPath("libsensors.so.4.3.2");
+                jnaProxy = Native.loadLibrary(libPath,
                     CSensors.class);
+                new File(libPath).delete();
             } catch(UnsatisfiedLinkError err1) {
                 jnaProxy = null;
             }
         }
         
         return (CSensors)jnaProxy;
-    }
-    
-    private static String libFullPath() {
-        String libName = "libsensors.so.4.3.2";
-        InputStream in = UnixSensorsManager.class.getResourceAsStream("/" + libName);
-        File tempFile;
-        try {
-            tempFile = File.createTempFile(libName, "");
-            byte[] buffer = new byte[1024];
-            int read;
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            while ((read = in.read(buffer)) != -1) {
-                fos.write(buffer, 0, read);
-            }
-            fos.close();
-            in.close();
-        } catch (IOException ex) {
-            //TODO: handle
-            return "";
-        }
-
-        return tempFile.getAbsolutePath();
-    }
+    }    
 
     private int initCSensors(CSensors cSensors) {
         return cSensors.sensors_init(null);

@@ -5,6 +5,7 @@
  */
 package com.profesorfalken.jsensors.manager.windows.powershell;
 
+import com.profesorfalken.jsensors.util.SensorsUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -21,32 +22,12 @@ class PowerShellScriptHelper {
     private static final String LINE_BREAK = "\r\n";
 
     private static String dllImport() {
-        return "[System.Reflection.Assembly]::LoadFile(\"" + dllPath() + "\")"
-                + " | Out-Null" + LINE_BREAK;
+        return "[System.Reflection.Assembly]::LoadFile(\"" + 
+                SensorsUtils.generateLibTmpPath("OpenHardwareMonitorLib.dll") + 
+                "\")" + 
+                " | Out-Null" + LINE_BREAK;
     }
-
-    private static String dllPath() {
-        String dllName = "OpenHardwareMonitorLib.dll";
-        InputStream in = PowerShellScriptHelper.class.getResourceAsStream("/" + dllName);
-        File tempFile;
-        try {
-            tempFile = File.createTempFile(dllName, "");
-            byte[] buffer = new byte[1024];
-            int read;
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            while ((read = in.read(buffer)) != -1) {
-                fos.write(buffer, 0, read);
-            }
-            fos.close();
-            in.close();
-        } catch (IOException ex) {
-            //TODO: handle
-            return "";
-        }
-
-        return tempFile.getAbsolutePath();
-    }
-
+    
     private static String newComputerInstance() {
         StringBuilder code = new StringBuilder();
 
