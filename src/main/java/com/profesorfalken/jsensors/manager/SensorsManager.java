@@ -41,9 +41,9 @@ public abstract class SensorsManager {
     protected abstract String getSensorsData();
 
     public Components getComponents() {
-        Cpu cpu = null;
-        Gpu gpu = null;
-        Disk disk = null;
+        List<Cpu> cpus = new ArrayList<Cpu>();
+        List<Gpu> gpus = new ArrayList<Gpu>();
+        List<Disk> disks = new ArrayList<Disk>();
 
         String normalizedSensorsData = getSensorsData();
 
@@ -51,15 +51,15 @@ public abstract class SensorsManager {
 
         for (final String componentData : componentsData) {
             if (componentData.startsWith("CPU")) {
-                cpu = getCpu(componentData);
+                cpus.add(getCpu(componentData));
             } else if (componentData.startsWith("GPU")) {
-                gpu = getGpu(componentData);
+                gpus.add(getGpu(componentData));
             } else if (componentData.startsWith("DISK")) {
-                disk = getDisk(componentData);
+                disks.add(getDisk(componentData));
             }
         }
 
-        return new Components(cpu, gpu, disk);
+        return new Components(cpus, gpus, disks);
     }
 
     private Cpu getCpu(String cpuData) {
@@ -103,7 +103,7 @@ public abstract class SensorsManager {
             } else if (dataLine.startsWith("Fan")) {
                 String[] data = dataLine.split(":");
                 Fan fan = new Fan(data[0].trim(),
-                        data[1].trim().length() > 0 ? Double.valueOf(data[1].trim()) : 0.0);
+                        data[1].trim().length() > 0 ? Integer.valueOf(data[1].trim()) : 0);
                 fans.add(fan);
             }
         }

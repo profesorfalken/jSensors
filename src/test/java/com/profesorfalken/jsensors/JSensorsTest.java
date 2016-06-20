@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -96,8 +97,12 @@ public class JSensorsTest {
         logger.info("Testing CPU sensors");
         
         //Get CPU component
-        Cpu cpu = getJSensorsStub(TESTSET_1).components().cpu;
+        List<Cpu> cpus = getJSensorsStub(TESTSET_1).components().cpus;
         
+        assertNotNull("Cannot recover CPU data", cpus);
+        assertTrue("No CPUs found", cpus.size() > 0);
+        
+        Cpu cpu = cpus.get(0);
         assertNotNull("Cannot recover CPU data", cpu);
         
         assertNotNull("No CPU name", cpu.name);
@@ -135,8 +140,13 @@ public class JSensorsTest {
         logger.info("Testing GPU sensors");
         
         //Get GPU component
-        Gpu gpu = getJSensorsStub(TESTSET_1).components().gpu;
+        //Get CPU component
+        List<Gpu> gpus = getJSensorsStub(TESTSET_1).components().gpus;
         
+        assertNotNull("Cannot recover GPU data", gpus);
+        assertTrue("No GPUs found", gpus.size() > 0);
+        
+        Gpu gpu = gpus.get(0);
         assertNotNull("Cannot recover GPU data", gpu);
         
         assertNotNull("No GPU name", gpu.name);
@@ -174,8 +184,13 @@ public class JSensorsTest {
         logger.info("Testing CPU sensors");
         
         //Get Disk component
-        Disk disk = getJSensorsStub(TESTSET_1).components().disk;
+        //Get CPU component
+        List<Disk> disks = getJSensorsStub(TESTSET_1).components().disks;
         
+        assertNotNull("Cannot recover Disk data", disks);
+        assertTrue("No Disks found", disks.size() > 0);
+        
+        Disk disk = disks.get(0);
         assertNotNull("Cannot recover Disk data", disk);
         
         assertNotNull("No Disk name", disk.name);

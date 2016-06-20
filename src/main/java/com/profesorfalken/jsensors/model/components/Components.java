@@ -15,18 +15,20 @@
  */
 package com.profesorfalken.jsensors.model.components;
 
+import java.util.List;
+
 /**
  *
  * @author Javier Garcia Alonso
  */
 public class Components {
-    public final Cpu cpu;
-    public final Gpu gpu;
-    public final Disk disk;
+    public final List<Cpu> cpus;
+    public final List<Gpu> gpus;
+    public final List<Disk> disks;
 
-    public Components(Cpu cpu, Gpu gpu, Disk disk) {
-        this.cpu = cpu;
-        this.gpu = gpu;
-        this.disk = disk;
+    public Components(List<Cpu> cpus, List<Gpu> gpus, List<Disk> disks) {
+        this.cpus = cpus;
+        this.gpus = gpus;
+        this.disks = disks;
     }    
 }

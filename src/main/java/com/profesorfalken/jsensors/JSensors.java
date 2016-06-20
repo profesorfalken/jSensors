@@ -75,6 +75,7 @@ public enum JSensors {
     }
 
     public static void main(String[] args) {
+        System.out.println("Scanning sensors data...");
         Map<String, String> overriddenConfig = new HashMap<String, String>();
         for (final String arg : args) {
             if ("--debug".equals(arg)) {
@@ -84,35 +85,41 @@ public enum JSensors {
 
         Components components = JSensors.get.config(overriddenConfig).components();
 
-        Cpu cpu = components.cpu;
-        if (cpu != null) {
-            System.out.println("Found CPU component " + cpu.name);
-            readComponent(cpu);
+        List<Cpu> cpus = components.cpus;
+        if (cpus != null) {
+            for (final Cpu cpu : cpus) {
+                System.out.println("Found CPU component: " + cpu.name);
+                readComponent(cpu);
+            }
         }
-        
-        Gpu gpu = components.gpu;
-        if (gpu != null) {
-            System.out.println("Found GPU component " + gpu.name);
-            readComponent(gpu);
+
+        List<Gpu> gpus = components.gpus;
+        if (gpus != null) {
+            for (final Gpu gpu : gpus) {
+                System.out.println("Found GPU component: " + gpu.name);
+                readComponent(gpu);
+            }
         }
-        
-        Disk disk = components.disk;
-        if (disk != null) {
-            System.out.println("Found disk component " + disk.name);
-            readComponent(disk);
+
+        List<Disk> disks = components.disks;
+        if (disks != null) {
+            for (final Disk disk : disks) {
+                System.out.println("Found disk component: " + disk.name);
+                readComponent(disk);
+            }
         }
     }
 
     private static void readComponent(Component component) {
         if (component.sensors != null) {
             System.out.println("Sensors: ");
-            
-            List<Temperature> temps = component.sensors.temperatures;            
+
+            List<Temperature> temps = component.sensors.temperatures;
             for (final Temperature temp : temps) {
                 System.out.println(temp.name + ": " + temp.value + " C");
             }
-            
-            List<Fan> fans = component.sensors.fans;            
+
+            List<Fan> fans = component.sensors.fans;
             for (final Fan fan : fans) {
                 System.out.println(fan.name + ": " + fan.value + " RPM");
             }
