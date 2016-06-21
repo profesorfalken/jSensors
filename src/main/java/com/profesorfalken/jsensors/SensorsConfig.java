@@ -21,15 +21,20 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Utility class that reads the content of the configuration file and convert it into 
- * Properties.
- * 
+ * Utility class that reads the content of the configuration file and convert it
+ * into Properties.
+ *
  * @author Javier Garcia Alonso
  */
 final class SensorsConfig {
-   private static final String CONFIG_FILENAME = "jsensors.properties";
-   
-   private static Properties config;   
+
+    private static final String CONFIG_FILENAME = "jsensors.properties";
+
+    private static Properties config;
+
+    //Hide constructor
+    public SensorsConfig() {
+    }
 
     public static Properties getConfig() {
         if (config == null) {
@@ -41,18 +46,18 @@ final class SensorsConfig {
                 //TODO: handle error
             }
         }
-        
+
         return config;
     }
-    
+
     public static Map<String, String> getConfigMap() {
         Map<String, String> returnMap = new HashMap<String, String>();
         Properties configProps = getConfig();
-        
+
         for (final String propertyName : configProps.stringPropertyNames()) {
             returnMap.put(propertyName, configProps.getProperty(propertyName));
         }
-        
+
         return returnMap;
     }
 }

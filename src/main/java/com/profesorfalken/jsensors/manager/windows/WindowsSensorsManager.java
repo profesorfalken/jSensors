@@ -30,6 +30,7 @@ public class WindowsSensorsManager extends SensorsManager {
 
     private static final String LINE_BREAK = "\r\n";
 
+    @Override
     public String getSensorsData() {
         String rawSensorsData = PowerShellOperations.getRawSensorsData();
 

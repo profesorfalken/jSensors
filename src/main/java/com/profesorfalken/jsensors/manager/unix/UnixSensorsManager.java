@@ -33,6 +33,7 @@ public class UnixSensorsManager extends SensorsManager {
     private final StringBuilder sensorsData = new StringBuilder();
     private final StringBuilder sensorsDebugData = new StringBuilder();
 
+    @Override
     public String getSensorsData() {
         CSensors cSensors = loadDynamicLibrary();
     
@@ -79,7 +80,7 @@ public class UnixSensorsManager extends SensorsManager {
     }
     
     private void addData(String data, boolean newLine) {
-        String endLine = (newLine) ? LINE_BREAK : "";
+        String endLine = newLine ? LINE_BREAK : "";
         sensorsData.append(data).append(endLine);
         sensorsDebugData.append(data).append(endLine);
     }
