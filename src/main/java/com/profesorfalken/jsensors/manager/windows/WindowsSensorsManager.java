@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * MS Windows implementation of SensorManager that gets the sensors using a 
+ * PowerShell script and parses it into a normalized format.
+ * 
  * @author Javier Garcia Alonso
  */
 public class WindowsSensorsManager extends SensorsManager {

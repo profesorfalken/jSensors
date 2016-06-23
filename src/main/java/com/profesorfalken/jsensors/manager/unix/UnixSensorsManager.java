@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Linux implementation of SensorManager that gets the sensors using 
+ * JNA and parses it into a normalized format.
  *
  * @author Javier Garcia Alonso
  */
