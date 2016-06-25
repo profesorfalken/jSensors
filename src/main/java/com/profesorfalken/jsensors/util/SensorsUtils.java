@@ -16,22 +16,27 @@
 package com.profesorfalken.jsensors.util;
 
 import com.profesorfalken.jsensors.manager.unix.UnixSensorsManager;
+import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Javier Garcia Alonso
  */
 public class SensorsUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
+    
     public static String generateLibTmpPath(String libName) {
         return generateLibTmpPath("/", libName);
     }
     
     public static String generateLibTmpPath(String path, String libName) {
-        InputStream in = UnixSensorsManager.class.getResourceAsStream(path + libName);
+        InputStream in = SensorsUtils.class.getResourceAsStream(path + libName);
         File tempFile;
         try {
             tempFile = File.createTempFile(libName, "");
@@ -44,7 +49,7 @@ public class SensorsUtils {
             fos.close();
             in.close();
         } catch (IOException ex) {
-            //TODO: handle
+            LOGGER.error("Cannot generate temporary file", ex);
             return "";
         }
 

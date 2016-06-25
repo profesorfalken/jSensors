@@ -112,7 +112,7 @@ public class WindowsSensorsManager extends SensorsManager {
     }
 
     private static String getData(String line, final int index) {
-        if (line.indexOf(":") > 0) {
+        if (line.contains(":")) {
             return line.split(":", 2)[index].trim();
         }
 

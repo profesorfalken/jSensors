@@ -17,12 +17,17 @@ package com.profesorfalken.jsensors.manager.windows.powershell;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
+import com.profesorfalken.jsensors.manager.windows.WindowsSensorsManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Javier Garcia Alonso
  */
 public class PowerShellOperations {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
+    
     public static boolean isAdministrator() {
         String command = "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")";
         
@@ -37,7 +42,7 @@ public class PowerShellOperations {
             powershell.executeCommand(PowerShellScriptHelper.generateScript());           
             rawData = powershell.executeCommand(PowerShellScriptHelper.generateScript()).getCommandOutput();
         } catch (PowerShellNotAvailableException ex) {
-            //TODO: Handle error
+            LOGGER.error("Cannot find PowerShell in your system. Please install it", ex);
         } finally  {
             if (powershell != null) {
                 powershell.close();

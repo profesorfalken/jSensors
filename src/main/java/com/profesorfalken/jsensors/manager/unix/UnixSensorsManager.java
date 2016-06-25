@@ -59,7 +59,8 @@ public class UnixSensorsManager extends SensorsManager {
         try {
             jnaProxy = Native.loadLibrary("sensors",
                 CSensors.class);
-        } catch (UnsatisfiedLinkError err) {
+        } catch (UnsatisfiedLinkError err) {            
+            LOGGER.debug("Cannot find library in system, using embedded one");
             try {
                 String libPath = SensorsUtils.generateLibTmpPath("/lib/linux/", "libsensors.so.4.3.2");
                 jnaProxy = Native.loadLibrary(libPath,
@@ -67,6 +68,7 @@ public class UnixSensorsManager extends SensorsManager {
                 new File(libPath).delete();
             } catch(UnsatisfiedLinkError err1) {
                 jnaProxy = null;
+                LOGGER.error("Cannot load sensors dinamic library", err1);
             }
         }
         
@@ -148,10 +150,9 @@ public class UnixSensorsManager extends SensorsManager {
 
                         if (subFeature.name.endsWith("_input")) {
                             addData(String.format("%s", pValue.getValue()));                     
-                            //break;
                         }
                     } else {
-                        addData(String.format("could not retrieve value"));                     
+                        addData("Could not retrieve value");                     
                     }
                 }
             }

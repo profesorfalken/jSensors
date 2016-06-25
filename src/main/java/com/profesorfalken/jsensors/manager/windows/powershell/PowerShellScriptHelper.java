@@ -20,12 +20,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Javier Garcia Alonso
  */
 class PowerShellScriptHelper {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
     private static final String LINE_BREAK = "\r\n";
 
@@ -77,6 +80,7 @@ class PowerShellScriptHelper {
     static String generateScript() {
         File tmpFile = null;
         FileWriter writer = null;
+        String scriptPath = null;
 
         try {
             tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
@@ -85,8 +89,7 @@ class PowerShellScriptHelper {
             writer.flush();
             writer.close();
         } catch (Exception ex) {
-            //TODO: handle
-            ex.printStackTrace();
+            LOGGER.error("Cannot create PowerShell script file", ex);
             return "Error";
         } finally {
             try {
@@ -94,11 +97,14 @@ class PowerShellScriptHelper {
                     writer.close();
                 }
             } catch (IOException ioe) {
-                //TODO: handle
-                ioe.printStackTrace();
+                LOGGER.warn("Error when finish writing Powershell script file", ioe);
             }
         }
-        return tmpFile.getAbsolutePath();
+        if (tmpFile != null) {
+            scriptPath = tmpFile.getAbsolutePath();
+        }
+        
+        return scriptPath;
     }
 
     private static String getPowerShellScript() {
