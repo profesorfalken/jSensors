@@ -15,7 +15,6 @@
  */
 package com.profesorfalken.jsensors.util;
 
-import com.profesorfalken.jsensors.manager.unix.UnixSensorsManager;
 import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +29,11 @@ import org.slf4j.LoggerFactory;
  */
 public class SensorsUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
+            
+    //Hides constructor
+    private SensorsUtils() {
+        
+    }
     
     public static String generateLibTmpPath(String libName) {
         return generateLibTmpPath("/", libName);

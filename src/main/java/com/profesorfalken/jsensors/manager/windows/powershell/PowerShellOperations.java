@@ -17,7 +17,6 @@ package com.profesorfalken.jsensors.manager.windows.powershell;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
-import com.profesorfalken.jsensors.manager.windows.WindowsSensorsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +26,11 @@ import org.slf4j.LoggerFactory;
  */
 public class PowerShellOperations {
     private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
+    
+    //Hides constructor
+    private PowerShellOperations() {
+        
+    }
     
     public static boolean isAdministrator() {
         String command = "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")";

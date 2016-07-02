@@ -28,6 +28,7 @@ public class StubSensorsManager extends SensorsManager {
         this.stubContent = stubContent;
     }
 
+    @Override
     public String getSensorsData() {
         return this.stubContent;
     }

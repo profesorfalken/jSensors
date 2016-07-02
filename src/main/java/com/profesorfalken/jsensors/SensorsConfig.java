@@ -37,7 +37,7 @@ final class SensorsConfig {
     private static Properties config;
 
     //Hide constructor
-    public SensorsConfig() {
+    private SensorsConfig() {
     }
 
     public static Properties getConfig() {

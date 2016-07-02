@@ -74,7 +74,7 @@ public abstract class SensorsManager {
         return new Disk(getName(diskData), getSensors(diskData));
     }
     
-    private String getName(String componentData) {
+    private static String getName(String componentData) {
         String name = null;
         
         String[] dataLines = componentData.split("\\r?\\n");

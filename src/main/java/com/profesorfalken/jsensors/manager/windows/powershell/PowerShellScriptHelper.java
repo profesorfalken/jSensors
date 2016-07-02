@@ -31,6 +31,9 @@ class PowerShellScriptHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
     private static final String LINE_BREAK = "\r\n";
+    
+    //Hides constructor
+    private PowerShellScriptHelper() {}
 
     private static String dllImport() {
         return "[System.Reflection.Assembly]::LoadFile(\"" + 

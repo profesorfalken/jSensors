@@ -20,7 +20,7 @@ package com.profesorfalken.jsensors.model.sensors;
  * @author Javier Garcia Alonso
  */
 public class Temperature {
-    public String name;
+    public final String name;
     public final Double value;
 
     public Temperature(String name, Double value) {

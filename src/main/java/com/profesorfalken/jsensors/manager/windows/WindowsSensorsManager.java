@@ -21,9 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * MS Windows implementation of SensorManager that gets the sensors using a 
+ * MS Windows implementation of SensorManager that gets the sensors using a
  * PowerShell script and parses it into a normalized format.
- * 
+ *
  * @author Javier Garcia Alonso
  */
 public class WindowsSensorsManager extends SensorsManager {
@@ -31,6 +31,8 @@ public class WindowsSensorsManager extends SensorsManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(WindowsSensorsManager.class);
 
     private static final String LINE_BREAK = "\r\n";
+    
+    private static final String COMPONENT_SEPARATOR = "[COMPONENT]";
 
     @Override
     public String getSensorsData() {
@@ -39,7 +41,7 @@ public class WindowsSensorsManager extends SensorsManager {
         if (debugMode) {
             LOGGER.info("RawSensorData: " + rawSensorsData);
         }
-        
+
         String normalizedSensorsData = normalizeSensorsData(rawSensorsData);
         if (debugMode) {
             LOGGER.info("NormalizeSensorData: " + normalizedSensorsData);
@@ -55,24 +57,22 @@ public class WindowsSensorsManager extends SensorsManager {
         boolean readingHardLabel = false;
         boolean readingSensor = false;
         for (final String dataLine : dataLines) {
-            if (readingHardLabel == false && "HardwareType".equals(getKey(dataLine))) {
+            if (!readingHardLabel && "HardwareType".equals(getKey(dataLine))) {
                 String hardwareType = getValue(dataLine);
                 if ("CPU".equals(hardwareType)) {
-                    normalizedSensorsData.append("[COMPONENT]").append(LINE_BREAK);
+                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("CPU").append(LINE_BREAK);
                     readingHardLabel = true;
-                    continue;
                 } else if (hardwareType.toUpperCase().startsWith("GPU")) {
-                    normalizedSensorsData.append("[COMPONENT]").append(LINE_BREAK);
+                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("GPU").append(LINE_BREAK);
                     readingHardLabel = true;
-                    continue;
                 } else if ("HDD".equals(hardwareType)) {
-                    normalizedSensorsData.append("[COMPONENT]").append(LINE_BREAK);
+                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("DISK").append(LINE_BREAK);
                     readingHardLabel = true;
-                    continue;
                 }
+                continue;
             }
 
             if (readingHardLabel) {
@@ -81,26 +81,30 @@ public class WindowsSensorsManager extends SensorsManager {
                     readingHardLabel = false;
                 }
             } else {
-                if ("SensorType".equals(getKey(dataLine))) {
-                    String sensorType = getValue(dataLine);
-                    if ("Temperature".equals(sensorType) || "Fan".equals(sensorType)) {
-                        normalizedSensorsData.append("Temperature".equals(sensorType) ? "Temp " : "Fan ");
-                        readingSensor = true;
-                        continue;
-                    }
-                }
-                if (readingSensor) {
-                    if ("Name".equals(getKey(dataLine))) {
-                        normalizedSensorsData.append(getValue(dataLine)).append(": ");
-                    } else if ("Value".equals(getKey(dataLine))) {
-                        normalizedSensorsData.append(getValue(dataLine)).append(LINE_BREAK);
-                        readingSensor = false;
-                    }
-                }
+                readingSensor = addSensorsData(readingSensor, dataLine, normalizedSensorsData);
             }
         }
 
         return normalizedSensorsData.toString();
+    }
+
+    private static boolean addSensorsData(boolean readingSensor, String dataLine, StringBuilder normalizedSensorsData) {
+        if ("SensorType".equals(getKey(dataLine))) {
+            String sensorType = getValue(dataLine);
+            if ("Temperature".equals(sensorType) || "Fan".equals(sensorType)) {
+                normalizedSensorsData.append("Temperature".equals(sensorType) ? "Temp " : "Fan ");
+                return true;
+            }
+        }
+        if (readingSensor) {
+            if ("Name".equals(getKey(dataLine))) {
+                normalizedSensorsData.append(getValue(dataLine)).append(": ");
+                return true;
+            } else if ("Value".equals(getKey(dataLine))) {
+                normalizedSensorsData.append(getValue(dataLine)).append(LINE_BREAK);                
+            }
+        }
+        return false;
     }
 
     private static String getKey(String line) {
