@@ -6,35 +6,35 @@ Monitorize all the hardware sensors of your PC using Java
 
 #### Windows Example Output ####
 
-Scanning sensors data...
-Found CPU component Intel Core i7-3770
-Sensors: 
-Temp CPU Core #1: 46.0 C
-Temp CPU Core #2: 43.0 C
-Temp CPU Core #3: 45.0 C
-Temp CPU Core #4: 45.0 C
-Temp CPU Package: 46.0 C
-Found GPU component AMD Radeon HD 7470
-Sensors: 
-Temp GPU Core: 53.0 C
-Found disk component ST250DM000-1BD141
-Sensors: 
-Temp Temperature: 34.0 C
+    Scanning sensors data...
+    Found CPU component Intel Core i7-3770
+    Sensors: 
+    Temp CPU Core #1: 46.0 C
+    Temp CPU Core #2: 43.0 C
+    Temp CPU Core #3: 45.0 C
+    Temp CPU Core #4: 45.0 C
+    Temp CPU Package: 46.0 C
+    Found GPU component AMD Radeon HD 7470
+    Sensors: 
+    Temp GPU Core: 53.0 C
+    Found disk component ST250DM000-1BD141
+    Sensors: 
+    Temp Temperature: 34.0 C
 
 #### Linux Example Output ####
 
-Scanning sensors data...
-Found CPU component ISA adapter
-Sensors: 
-Temp Core 0: 75.0 C
-Temp Core 2: 76.0 C
-Found GPU component PCI adapter
-Sensors: 
-Temp temp1: 62.0 C
-Found disk component Virtual device
-Sensors: 
-Temp temp1: 67.0 C
-Temp temp2: 67.0 C
+    Scanning sensors data...
+    Found CPU component ISA adapter
+    Sensors: 
+    Temp Core 0: 75.0 C
+    Temp Core 2: 76.0 C
+    Found GPU component PCI adapter
+    Sensors: 
+    Temp temp1: 62.0 C
+    Found disk component Virtual device
+    Sensors: 
+    Temp temp1: 67.0 C
+    Temp temp2: 67.0 C
 
 ## Installation ##
 
