@@ -1,4 +1,4 @@
-![](https://img.shields.io/maven-central/v/org.jhardware/jSensors.svg)
+![](https://img.shields.io/maven-central/v/com.profesorfalken/jSensors.svg)
 ![](https://img.shields.io/github/license/profesorfalken/jSensors.svg)
 
 # jSensors
