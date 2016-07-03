@@ -75,9 +75,9 @@ For the moment (v1.0-PreAlfa) the only modificable parameters (and its default v
     # If activated it logs in console all retrieved details
     debugMode=false
     
-  #### Override config element for one request ####
+#### Override config element for one request ####
   
-  When performing a request we can easily override config elements: 
+When performing a request we can easily override config elements: 
   
   ```java
       Map<String, String> overriddenConfig = new HashMap<String, String>();
