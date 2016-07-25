@@ -21,9 +21,9 @@ package com.profesorfalken.jsensors.model.sensors;
  */
 public class Fan {
     public final String name;
-    public final Integer value;
+    public final Double value;
 
-    public Fan(String name, Integer value) {
+    public Fan(String name, Double value) {
         this.name = name;
         this.value = value;
     }
