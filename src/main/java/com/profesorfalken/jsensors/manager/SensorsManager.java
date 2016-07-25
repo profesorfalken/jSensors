@@ -103,7 +103,7 @@ public abstract class SensorsManager {
             } else if (dataLine.startsWith("Fan")) {
                 String[] data = dataLine.split(":");
                 Fan fan = new Fan(data[0].trim(),
-                        data[1].trim().length() > 0 ? Integer.valueOf(data[1].trim()) : 0);
+                        data[1].trim().length() > 0 ? Double.valueOf(data[1].trim()) : 0.0);
                 fans.add(fan);
             }
         }
