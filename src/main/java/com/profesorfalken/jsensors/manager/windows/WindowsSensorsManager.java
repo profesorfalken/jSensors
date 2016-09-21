@@ -101,7 +101,10 @@ public class WindowsSensorsManager extends SensorsManager {
                 normalizedSensorsData.append(getValue(dataLine)).append(": ");
                 return true;
             } else if ("Value".equals(getKey(dataLine))) {
-                normalizedSensorsData.append(getValue(dataLine)).append(LINE_BREAK);                
+                normalizedSensorsData.append(getValue(dataLine)).append(LINE_BREAK);
+                return false;
+            } else {
+            	return true;
             }
         }
         return false;
