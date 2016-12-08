@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.profesorfalken</groupId>
     <artifactId>jSensors</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>jSensors</name>
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jPowerShell</artifactId>
-            <version>1.4.2</version>
+            <version>1.7</version>
         </dependency>
     </dependencies>
     <properties>

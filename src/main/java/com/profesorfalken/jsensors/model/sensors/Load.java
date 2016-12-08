@@ -15,20 +15,16 @@
  */
 package com.profesorfalken.jsensors.model.sensors;
 
-import java.util.List;
-
 /**
  *
  * @author Javier Garcia Alonso
  */
-public class Sensors {
-    public final List<Temperature> temperatures;
-    public final List<Fan> fans;
-    public final List<Load> loads;
+public class Load {
+    public final String name;
+    public final Double value;
 
-    public Sensors(List<Temperature> temperatures, List<Fan> fans, List<Load> loads) {
-        this.temperatures = temperatures;
-        this.fans = fans;
-        this.loads = loads;
-    }    
+    public Load(String name, Double value) {
+        this.name = name;
+        this.value = value;
+    }
 }
