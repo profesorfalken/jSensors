@@ -15,11 +15,12 @@
  */
 package com.profesorfalken.jsensors.manager.windows.powershell;
 
-import com.profesorfalken.jsensors.util.SensorsUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+
+import com.profesorfalken.jsensors.util.SensorsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +88,7 @@ class PowerShellScriptHelper {
 
         try {
             tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
+            tmpFile.deleteOnExit();
             writer = new FileWriter(tmpFile);
             writer.write(getPowerShellScript());
             writer.flush();
