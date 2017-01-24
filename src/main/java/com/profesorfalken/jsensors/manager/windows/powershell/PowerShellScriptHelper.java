@@ -87,6 +87,7 @@ class PowerShellScriptHelper {
 
         try {
             tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
+            tmpFile.deleteOnExit();
             writer = new FileWriter(tmpFile);
             writer.write(getPowerShellScript());
             writer.flush();
