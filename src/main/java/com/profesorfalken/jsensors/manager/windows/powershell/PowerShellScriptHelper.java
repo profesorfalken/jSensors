@@ -15,12 +15,11 @@
  */
 package com.profesorfalken.jsensors.manager.windows.powershell;
 
+import com.profesorfalken.jsensors.util.SensorsUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-
-import com.profesorfalken.jsensors.util.SensorsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
