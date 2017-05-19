@@ -91,9 +91,15 @@ public class WindowsSensorsManager extends SensorsManager {
     private static boolean addSensorsData(boolean readingSensor, String dataLine, StringBuilder normalizedSensorsData) {
         if ("SensorType".equals(getKey(dataLine))) {
             String sensorType = getValue(dataLine);
-            if ("Temperature".equals(sensorType) || "Fan".equals(sensorType)) {
-                normalizedSensorsData.append("Temperature".equals(sensorType) ? "Temp " : "Fan ");
-                return true;
+            if ("Temperature".equals(sensorType)) {
+            	normalizedSensorsData.append("Temp ");
+            	return true;
+            } else if ("Fan".equals(sensorType)) {
+            	normalizedSensorsData.append("Fan ");
+            	return true;
+            } else if ("Load".equals(sensorType)) {
+            	normalizedSensorsData.append("Load ");
+            	return true;
             }
         }
         if (readingSensor) {
