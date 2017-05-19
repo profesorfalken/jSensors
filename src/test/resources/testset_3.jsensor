@@ -1,0 +1,18 @@
+[COMPONENT]
+CPU
+Label: Intel Core i7-6700
+Load CPU Core #1: 16,66666
+Load CPU Core #2: 19,23077
+Load CPU Core #3: 14,10257
+Load CPU Core #4: 19,23077
+Load CPU Total: 17,30769
+Load Memory: 58,2909
+[COMPONENT]
+GPU
+Label: AMD Radeon(TM) R7 350X
+Temp GPU Core: 37
+Load GPU Core: 0
+[COMPONENT]
+DISK
+Label: Generic Hard Disk
+Load Used Space: 32,74615
