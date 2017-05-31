@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * Main class of JSensors. <br>
  * As library, it provides access to sensors information using a fluent api.
  * <p>
- * As standalone it prints in console all the retrieved sensor information.
+ * If launched as standalone application it prints in console all the retrieved sensor information.
  * 
  * @author Javier Garcia Alonso
  */
