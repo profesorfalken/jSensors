@@ -172,8 +172,8 @@ public class UnixSensorsManager extends SensorsManager {
 			DoubleByReference pValue = new DoubleByReference(value);
 			if (cSensors.sensors_get_value(chip, subFeature.number, pValue) == 0) {
 				addDebugData(String.format("SubFeature value: %s", pValue.getValue()));
-				
-				if (subFeature.name.endsWith("_input")) {					
+
+				if (subFeature.name.endsWith("_input")) {
 					addData(String.format("%s", pValue.getValue()));
 					break;
 				}

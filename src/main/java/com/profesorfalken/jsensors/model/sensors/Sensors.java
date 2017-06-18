@@ -22,13 +22,13 @@ import java.util.List;
  * @author Javier Garcia Alonso
  */
 public class Sensors {
-    public final List<Temperature> temperatures;
-    public final List<Fan> fans;
-    public final List<Load> loads;
+	public final List<Temperature> temperatures;
+	public final List<Fan> fans;
+	public final List<Load> loads;
 
-    public Sensors(List<Temperature> temperatures, List<Fan> fans, List<Load> loads) {
-        this.temperatures = temperatures;
-        this.fans = fans;
-        this.loads = loads;
-    }    
+	public Sensors(List<Temperature> temperatures, List<Fan> fans, List<Load> loads) {
+		this.temperatures = temperatures;
+		this.fans = fans;
+		this.loads = loads;
+	}
 }

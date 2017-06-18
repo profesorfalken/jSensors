@@ -50,7 +50,7 @@ public class JSensorsTest {
 	private static final String TESTSET_1 = TESTSET_DIR + "testset_1.jsensor";
 	private static final String TESTSET_2 = TESTSET_DIR + "testset_2.jsensor";
 	private static final String TESTSET_3 = TESTSET_DIR + "testset_3.jsensor";
-	
+
 	private static final List<String> TESTSET_LIST = Arrays.asList(TESTSET_1, TESTSET_2, TESTSET_3);
 
 	public JSensorsTest() {
@@ -104,20 +104,20 @@ public class JSensorsTest {
 	@Test
 	public void testCpu() throws Exception {
 		logger.info("Testing CPU sensors");
-		
+
 		for (final String testset : TESTSET_LIST) {
 			// Get CPU component
 			List<Cpu> cpus = getJSensorsStub(testset).components().cpus;
-	
+
 			assertNotNull("Cannot recover CPU data", cpus);
 			assertTrue("No CPUs found", cpus.size() > 0);
-	
+
 			Cpu cpu = cpus.get(0);
 			assertNotNull("Cannot recover CPU data", cpu);
-	
+
 			assertNotNull("No CPU name", cpu.name);
 			logger.info("CPU name: " + cpu.name);
-	
+
 			// Test temperature sensors (in C)
 			for (final Temperature temp : cpu.sensors.temperatures) {
 				assertNotNull("Temperature should not be null", temp);
@@ -126,7 +126,7 @@ public class JSensorsTest {
 				assertTrue("Temperature value should be lower than 120, but was " + temp.value, temp.value < 120);
 				logger.info("Temperature: " + temp.value);
 			}
-	
+
 			// Test Fan speed sensors (in RPM)
 			for (final Fan fan : cpu.sensors.fans) {
 				assertNotNull("Fan should not be null", fan);
@@ -150,16 +150,16 @@ public class JSensorsTest {
 		for (final String testset : TESTSET_LIST) {
 			// Get CPU component
 			List<Gpu> gpus = getJSensorsStub(testset).components().gpus;
-	
+
 			assertNotNull("Cannot recover GPU data", gpus);
 			assertTrue("No GPUs found", gpus.size() > 0);
-	
+
 			Gpu gpu = gpus.get(0);
 			assertNotNull("Cannot recover GPU data", gpu);
-	
+
 			assertNotNull("No GPU name", gpu.name);
 			logger.info("GPU name: " + gpu.name);
-	
+
 			// Test temperature sensors (in C)
 			for (final Temperature temp : gpu.sensors.temperatures) {
 				assertNotNull("Temperature should not be null", temp);
@@ -168,7 +168,7 @@ public class JSensorsTest {
 				assertTrue("Temperature value should be lower than 120, but was " + temp.value, temp.value < 120);
 				logger.info("Temperature: " + temp.value);
 			}
-	
+
 			// Test Fan speed sensors (in RPM)
 			for (final Fan fan : gpu.sensors.fans) {
 				assertNotNull("Fan should not be null", fan);
@@ -192,16 +192,16 @@ public class JSensorsTest {
 		for (final String testset : TESTSET_LIST) {
 			// Get Disk component
 			List<Disk> disks = getJSensorsStub(testset).components().disks;
-	
+
 			assertNotNull("Cannot recover Disk data", disks);
 			assertTrue("No Disks found", disks.size() > 0);
-	
+
 			Disk disk = disks.get(0);
 			assertNotNull("Cannot recover Disk data", disk);
-	
+
 			assertNotNull("No Disk name", disk.name);
 			logger.info("Disk name: " + disk.name);
-	
+
 			// Test temperature sensors (in C)
 			for (final Temperature temp : disk.sensors.temperatures) {
 				assertNotNull("Temperature should not be null", temp);
@@ -210,7 +210,7 @@ public class JSensorsTest {
 				assertTrue("Temperature value should be lower than 120, but was " + temp.value, temp.value < 120);
 				logger.info("Temperature: " + temp.value);
 			}
-	
+
 			// Test Fan speed sensors (in RPM)
 			for (final Fan fan : disk.sensors.fans) {
 				assertNotNull("Fan should not be null", fan);

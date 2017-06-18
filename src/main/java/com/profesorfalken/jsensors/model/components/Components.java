@@ -22,13 +22,13 @@ import java.util.List;
  * @author Javier Garcia Alonso
  */
 public class Components {
-    public final List<Cpu> cpus;
-    public final List<Gpu> gpus;
-    public final List<Disk> disks;
+	public final List<Cpu> cpus;
+	public final List<Gpu> gpus;
+	public final List<Disk> disks;
 
-    public Components(List<Cpu> cpus, List<Gpu> gpus, List<Disk> disks) {
-        this.cpus = cpus;
-        this.gpus = gpus;
-        this.disks = disks;
-    }    
+	public Components(List<Cpu> cpus, List<Gpu> gpus, List<Disk> disks) {
+		this.cpus = cpus;
+		this.gpus = gpus;
+		this.disks = disks;
+	}
 }

@@ -21,10 +21,10 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  *
  * @author Javier Garcia Alonso
  */
-public class Gpu extends Component{
+public class Gpu extends Component {
 
-    public Gpu(String name, Sensors sensors) {
-        super(name, sensors);
-    }
+	public Gpu(String name, Sensors sensors) {
+		super(name, sensors);
+	}
 
 }

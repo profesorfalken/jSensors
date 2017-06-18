@@ -28,35 +28,35 @@ import org.slf4j.LoggerFactory;
  * @author Javier Garcia Alonso
  */
 public class SensorsUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
-            
-    //Hides constructor
-    private SensorsUtils() {
-        
-    }
-    
-    public static String generateLibTmpPath(String libName) {
-        return generateLibTmpPath("/", libName);
-    }
-    
-    public static String generateLibTmpPath(String path, String libName) {
-        InputStream in = SensorsUtils.class.getResourceAsStream(path + libName);
-        File tempFile;
-        try {
-            tempFile = File.createTempFile(libName, "");
-            byte[] buffer = new byte[1024];
-            int read;
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            while ((read = in.read(buffer)) != -1) {
-                fos.write(buffer, 0, read);
-            }
-            fos.close();
-            in.close();
-        } catch (IOException ex) {
-            LOGGER.error("Cannot generate temporary file", ex);
-            return "";
-        }
+	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
-        return tempFile.getAbsolutePath();
-    }
+	// Hides constructor
+	private SensorsUtils() {
+
+	}
+
+	public static String generateLibTmpPath(String libName) {
+		return generateLibTmpPath("/", libName);
+	}
+
+	public static String generateLibTmpPath(String path, String libName) {
+		InputStream in = SensorsUtils.class.getResourceAsStream(path + libName);
+		File tempFile;
+		try {
+			tempFile = File.createTempFile(libName, "");
+			byte[] buffer = new byte[1024];
+			int read;
+			FileOutputStream fos = new FileOutputStream(tempFile);
+			while ((read = in.read(buffer)) != -1) {
+				fos.write(buffer, 0, read);
+			}
+			fos.close();
+			in.close();
+		} catch (IOException ex) {
+			LOGGER.error("Cannot generate temporary file", ex);
+			return "";
+		}
+
+		return tempFile.getAbsolutePath();
+	}
 }

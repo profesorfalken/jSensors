@@ -23,8 +23,8 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  */
 public class Disk extends Component {
 
-    public Disk(String name, Sensors sensors) {
-        super(name, sensors);
-    }
-    
+	public Disk(String name, Sensors sensors) {
+		super(name, sensors);
+	}
+
 }

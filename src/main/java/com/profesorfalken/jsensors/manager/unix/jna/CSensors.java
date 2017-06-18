@@ -26,18 +26,17 @@ import java.io.File;
  */
 public interface CSensors extends Library {
 
-    public int sensors_init(File input);
+	public int sensors_init(File input);
 
-    public CChip sensors_get_detected_chips(CChip[] match, IntByReference nr);
+	public CChip sensors_get_detected_chips(CChip[] match, IntByReference nr);
 
-    public CFeature sensors_get_features(CChip name, IntByReference nr);
+	public CFeature sensors_get_features(CChip name, IntByReference nr);
 
-    public String sensors_get_label(CChip name, CFeature feature);
+	public String sensors_get_label(CChip name, CFeature feature);
 
-    public int sensors_get_value(CChip name, int subfeat_nr, DoubleByReference value);
+	public int sensors_get_value(CChip name, int subfeat_nr, DoubleByReference value);
 
-    public String sensors_get_adapter_name(CBus bus);
+	public String sensors_get_adapter_name(CBus bus);
 
-    public CSubFeature sensors_get_all_subfeatures(CChip name,
-            CFeature feature, IntByReference nr);
+	public CSubFeature sensors_get_all_subfeatures(CChip name, CFeature feature, IntByReference nr);
 }

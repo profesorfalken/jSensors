@@ -29,39 +29,39 @@ import org.slf4j.LoggerFactory;
  * @author Javier Garcia Alonso
  */
 final class SensorsConfig {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(SensorsConfig.class);
 
-    private static final String CONFIG_FILENAME = "jsensors.properties";
+	private static final Logger LOGGER = LoggerFactory.getLogger(SensorsConfig.class);
 
-    private static Properties config;
+	private static final String CONFIG_FILENAME = "jsensors.properties";
 
-    //Hide constructor
-    private SensorsConfig() {
-    }
+	private static Properties config;
 
-    public static Properties getConfig() {
-        if (config == null) {
-            config = new Properties();
-            try {
-                //load a properties file from class path, inside static method
-                config.load(SensorsConfig.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
-            } catch (IOException ex) {
-                LOGGER.error("Cannot load config file " + CONFIG_FILENAME, ex);
-            }
-        }
+	// Hide constructor
+	private SensorsConfig() {
+	}
 
-        return config;
-    }
+	public static Properties getConfig() {
+		if (config == null) {
+			config = new Properties();
+			try {
+				// load a properties file from class path, inside static method
+				config.load(SensorsConfig.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
+			} catch (IOException ex) {
+				LOGGER.error("Cannot load config file " + CONFIG_FILENAME, ex);
+			}
+		}
 
-    public static Map<String, String> getConfigMap() {
-        Map<String, String> returnMap = new HashMap<String, String>();
-        Properties configProps = getConfig();
+		return config;
+	}
 
-        for (final String propertyName : configProps.stringPropertyNames()) {
-            returnMap.put(propertyName, configProps.getProperty(propertyName));
-        }
+	public static Map<String, String> getConfigMap() {
+		Map<String, String> returnMap = new HashMap<String, String>();
+		Properties configProps = getConfig();
 
-        return returnMap;
-    }
+		for (final String propertyName : configProps.stringPropertyNames()) {
+			returnMap.put(propertyName, configProps.getProperty(propertyName));
+		}
+
+		return returnMap;
+	}
 }

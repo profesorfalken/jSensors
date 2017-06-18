@@ -25,15 +25,15 @@ import java.util.List;
  */
 public class CFeature extends Structure {
 
-    public String name;
-    public int number;
-    public int type;
-    public int first_subfeature;
-    public int padding;
+	public String name;
+	public int number;
+	public int type;
+	public int first_subfeature;
+	public int padding;
 
-    @Override
-    protected List getFieldOrder() {
-        return Arrays.asList("name", "number", "type", "first_subfeature", "padding");
-    }
+	@Override
+	protected List getFieldOrder() {
+		return Arrays.asList("name", "number", "type", "first_subfeature", "padding");
+	}
 
 }

@@ -114,7 +114,7 @@ public abstract class SensorsManager {
 					Fan fan = new Fan(data[0].trim(),
 							data[1].trim().length() > 0 ? nf.parse(data[1].trim()).doubleValue() : 0.0);
 					fans.add(fan);
-				}  else if (dataLine.startsWith("Load")) {
+				} else if (dataLine.startsWith("Load")) {
 					String[] data = dataLine.split(":");
 					Load load = new Load(data[0].trim(),
 							data[1].trim().length() > 0 ? nf.parse(data[1].trim()).doubleValue() : 0.0);

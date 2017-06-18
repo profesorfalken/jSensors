@@ -32,101 +32,102 @@ import org.slf4j.LoggerFactory;
  * Main class of JSensors. <br>
  * As library, it provides access to sensors information using a fluent api.
  * <p>
- * If launched as standalone application it prints in console all the retrieved sensor information.
+ * If launched as standalone application it prints in console all the retrieved
+ * sensor information.
  * 
  * @author Javier Garcia Alonso
  */
 public enum JSensors {
 
-    get;
+	get;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JSensors.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JSensors.class);
 
-    final Map<String, String> baseConfig;
+	final Map<String, String> baseConfig;
 
-    Map<String, String> usedConfig = null;
+	Map<String, String> usedConfig = null;
 
-    private JSensors() {
-        //Load config from file
-        baseConfig = SensorsConfig.getConfigMap();
-    }
+	private JSensors() {
+		// Load config from file
+		baseConfig = SensorsConfig.getConfigMap();
+	}
 
-    public JSensors config(Map<String, String> config) {
-        //Override config
-        this.usedConfig = this.baseConfig;
-        for (final Map.Entry<String, String> entry : config.entrySet()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(String.format("Overriding config entry %s, %s by %s",
-                        entry.getKey(), this.usedConfig.get(entry.getKey()), entry.getValue()));
-            }
-            this.usedConfig.put(entry.getKey(), entry.getValue());
-        }
+	public JSensors config(Map<String, String> config) {
+		// Override config
+		this.usedConfig = this.baseConfig;
+		for (final Map.Entry<String, String> entry : config.entrySet()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug(String.format("Overriding config entry %s, %s by %s", entry.getKey(),
+						this.usedConfig.get(entry.getKey()), entry.getValue()));
+			}
+			this.usedConfig.put(entry.getKey(), entry.getValue());
+		}
 
-        return this;
-    }
+		return this;
+	}
 
-    public Components components() {
-        if (this.usedConfig == null) {
-            this.usedConfig = new HashMap<String, String>();
-        }
+	public Components components() {
+		if (this.usedConfig == null) {
+			this.usedConfig = new HashMap<String, String>();
+		}
 
-        Components components = SensorsLocator.get.getComponents(this.usedConfig);
+		Components components = SensorsLocator.get.getComponents(this.usedConfig);
 
-        //Reset config
-        this.usedConfig = this.baseConfig;
+		// Reset config
+		this.usedConfig = this.baseConfig;
 
-        return components;
-    }
+		return components;
+	}
 
-    public static void main(String[] args) {
-        System.out.println("Scanning sensors data...");
-        Map<String, String> overriddenConfig = new HashMap<String, String>();
-        for (final String arg : args) {
-            if ("--debug".equals(arg)) {
-                overriddenConfig.put("debugMode", "true");
-            }
-        }
+	public static void main(String[] args) {
+		System.out.println("Scanning sensors data...");
+		Map<String, String> overriddenConfig = new HashMap<String, String>();
+		for (final String arg : args) {
+			if ("--debug".equals(arg)) {
+				overriddenConfig.put("debugMode", "true");
+			}
+		}
 
-        Components components = JSensors.get.config(overriddenConfig).components();
+		Components components = JSensors.get.config(overriddenConfig).components();
 
-        List<Cpu> cpus = components.cpus;
-        if (cpus != null) {
-            for (final Cpu cpu : cpus) {
-                System.out.println("Found CPU component: " + cpu.name);
-                readComponent(cpu);
-            }
-        }
+		List<Cpu> cpus = components.cpus;
+		if (cpus != null) {
+			for (final Cpu cpu : cpus) {
+				System.out.println("Found CPU component: " + cpu.name);
+				readComponent(cpu);
+			}
+		}
 
-        List<Gpu> gpus = components.gpus;
-        if (gpus != null) {
-            for (final Gpu gpu : gpus) {
-                System.out.println("Found GPU component: " + gpu.name);
-                readComponent(gpu);
-            }
-        }
+		List<Gpu> gpus = components.gpus;
+		if (gpus != null) {
+			for (final Gpu gpu : gpus) {
+				System.out.println("Found GPU component: " + gpu.name);
+				readComponent(gpu);
+			}
+		}
 
-        List<Disk> disks = components.disks;
-        if (disks != null) {
-            for (final Disk disk : disks) {
-                System.out.println("Found disk component: " + disk.name);
-                readComponent(disk);
-            }
-        }
-    }
+		List<Disk> disks = components.disks;
+		if (disks != null) {
+			for (final Disk disk : disks) {
+				System.out.println("Found disk component: " + disk.name);
+				readComponent(disk);
+			}
+		}
+	}
 
-    private static void readComponent(Component component) {
-        if (component.sensors != null) {
-            System.out.println("Sensors: ");
+	private static void readComponent(Component component) {
+		if (component.sensors != null) {
+			System.out.println("Sensors: ");
 
-            List<Temperature> temps = component.sensors.temperatures;
-            for (final Temperature temp : temps) {
-                System.out.println(temp.name + ": " + temp.value + " C");
-            }
+			List<Temperature> temps = component.sensors.temperatures;
+			for (final Temperature temp : temps) {
+				System.out.println(temp.name + ": " + temp.value + " C");
+			}
 
-            List<Fan> fans = component.sensors.fans;
-            for (final Fan fan : fans) {
-                System.out.println(fan.name + ": " + fan.value + " RPM");
-            }
-        }
-    }
+			List<Fan> fans = component.sensors.fans;
+			for (final Fan fan : fans) {
+				System.out.println(fan.name + ": " + fan.value + " RPM");
+			}
+		}
+	}
 }

@@ -25,14 +25,14 @@ import java.util.List;
  */
 public class CChip extends Structure {
 
-    public String prefix;
-    public CBus bus;
-    public String path;
-    public int addr;
+	public String prefix;
+	public CBus bus;
+	public String path;
+	public int addr;
 
-    @Override
-    protected List getFieldOrder() {
-        return Arrays.asList("prefix", "bus", "path", "addr");
-    }
+	@Override
+	protected List getFieldOrder() {
+		return Arrays.asList("prefix", "bus", "path", "addr");
+	}
 
 }

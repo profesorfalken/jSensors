@@ -22,11 +22,11 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  * @author javier
  */
 public abstract class Component {
-    public final String name;
-    public final Sensors sensors;
-    
-    public Component(String name, Sensors sensors) {
-        this.name = name;
-        this.sensors = sensors;
-    }
+	public final String name;
+	public final Sensors sensors;
+
+	public Component(String name, Sensors sensors) {
+		this.name = name;
+		this.sensors = sensors;
+	}
 }

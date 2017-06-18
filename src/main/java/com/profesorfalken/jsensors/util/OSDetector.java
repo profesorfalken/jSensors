@@ -21,21 +21,20 @@ package com.profesorfalken.jsensors.util;
  * @author Javier Garcia Alonso
  */
 public class OSDetector {
-    private static final String OS = System.getProperty("os.name").toLowerCase();
-    
-     /**
-     * Hide constructor
-     */
-    private OSDetector() {
-    }    
+	private static final String OS = System.getProperty("os.name").toLowerCase();
 
-    public static boolean isWindows() {
-        return OS.startsWith("win");
-    }
+	/**
+	 * Hide constructor
+	 */
+	private OSDetector() {
+	}
 
-    public static boolean isUnix() {
-        return OS.contains("nix") || OS.contains("nux") 
-                || OS.contains("aix");
-    }
+	public static boolean isWindows() {
+		return OS.startsWith("win");
+	}
+
+	public static boolean isUnix() {
+		return OS.contains("nix") || OS.contains("nux") || OS.contains("aix");
+	}
 
 }

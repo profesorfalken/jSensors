@@ -20,11 +20,11 @@ package com.profesorfalken.jsensors.model.sensors;
  * @author Javier Garcia Alonso
  */
 public class Fan {
-    public final String name;
-    public final Double value;
+	public final String name;
+	public final Double value;
 
-    public Fan(String name, Double value) {
-        this.name = name;
-        this.value = value;
-    }
+	public Fan(String name, Double value) {
+		this.name = name;
+		this.value = value;
+	}
 }

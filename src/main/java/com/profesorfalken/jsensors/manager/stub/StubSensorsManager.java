@@ -22,14 +22,14 @@ import com.profesorfalken.jsensors.manager.SensorsManager;
  * @author Javier Garcia Alonso
  */
 public class StubSensorsManager extends SensorsManager {
-    private final String stubContent;
-    
-    public StubSensorsManager(String stubContent) {
-        this.stubContent = stubContent;
-    }
+	private final String stubContent;
 
-    @Override
-    public String getSensorsData() {
-        return this.stubContent;
-    }
+	public StubSensorsManager(String stubContent) {
+		this.stubContent = stubContent;
+	}
+
+	@Override
+	public String getSensorsData() {
+		return this.stubContent;
+	}
 }

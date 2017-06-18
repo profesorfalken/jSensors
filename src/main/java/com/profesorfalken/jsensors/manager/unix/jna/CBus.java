@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class CBus extends Structure {
 
-    public short type;
-    public short nr;
+	public short type;
+	public short nr;
 
-    @Override
-    protected List getFieldOrder() {
-        return Arrays.asList("type", "nr");
-    }
+	@Override
+	protected List getFieldOrder() {
+		return Arrays.asList("type", "nr");
+	}
 
 }

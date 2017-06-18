@@ -21,10 +21,10 @@ import com.profesorfalken.jsensors.model.sensors.Sensors;
  *
  * @author Javier Garcia Alonso
  */
-public class Cpu extends Component{
+public class Cpu extends Component {
 
-    public Cpu(String name, Sensors sensors) {
-        super(name, sensors);
-    }
+	public Cpu(String name, Sensors sensors) {
+		super(name, sensors);
+	}
 
 }

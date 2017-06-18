@@ -25,15 +25,15 @@ import java.util.List;
  */
 public class CSubFeature extends Structure {
 
-    public String name;
-    public int number;
-    public int type;
-    public int mapping;
-    public int flags;
+	public String name;
+	public int number;
+	public int type;
+	public int mapping;
+	public int flags;
 
-    @Override
-    protected List getFieldOrder() {
-        return Arrays.asList("name", "number", "type", "mapping", "flags");
-    }
+	@Override
+	protected List getFieldOrder() {
+		return Arrays.asList("name", "number", "type", "mapping", "flags");
+	}
 
 }

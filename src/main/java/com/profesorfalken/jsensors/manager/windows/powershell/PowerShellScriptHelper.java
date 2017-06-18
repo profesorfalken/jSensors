@@ -28,96 +28,96 @@ import org.slf4j.LoggerFactory;
  * @author Javier Garcia Alonso
  */
 class PowerShellScriptHelper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
-    private static final String LINE_BREAK = "\r\n";
-    
-    //Hides constructor
-    private PowerShellScriptHelper() {}
+	private static final String LINE_BREAK = "\r\n";
 
-    private static String dllImport() {
-        return "[System.Reflection.Assembly]::LoadFile(\"" + 
-                SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll") + 
-                "\")" + 
-                " | Out-Null" + LINE_BREAK;
-    }
-    
-    private static String newComputerInstance() {
-        StringBuilder code = new StringBuilder();
+	// Hides constructor
+	private PowerShellScriptHelper() {
+	}
 
-        code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
+	private static String dllImport() {
+		return "[System.Reflection.Assembly]::LoadFile(\""
+				+ SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll") + "\")" + " | Out-Null"
+				+ LINE_BREAK;
+	}
 
-        code.append("$PC.MainboardEnabled = $true").append(LINE_BREAK);
-        code.append("$PC.CPUEnabled = $true").append(LINE_BREAK);
-        code.append("$PC.RAMEnabled = $true").append(LINE_BREAK);
-        code.append("$PC.GPUEnabled = $true").append(LINE_BREAK);
-        code.append("$PC.FanControllerEnabled = $true").append(LINE_BREAK);
-        code.append("$PC.HDDEnabled = $true").append(LINE_BREAK);
+	private static String newComputerInstance() {
+		StringBuilder code = new StringBuilder();
 
-        return code.toString();
-    }
+		code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
 
-    private static String sensorsQueryLoop() {
-        StringBuilder code = new StringBuilder();
+		code.append("$PC.MainboardEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.CPUEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.RAMEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.GPUEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.FanControllerEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.HDDEnabled = $true").append(LINE_BREAK);
 
-        code.append("$PC.Open()").append(LINE_BREAK);
+		return code.toString();
+	}
 
-        code.append("ForEach ($hw in $PC.Hardware)").append(LINE_BREAK);
-        code.append("{").append(LINE_BREAK);
-        code.append("$hw").append(LINE_BREAK);
-        code.append("$hw.Update()").append(LINE_BREAK);
-        code.append("ForEach ($subhw in $hw.SubHardware)").append(LINE_BREAK);
-        code.append("{").append(LINE_BREAK);
-        code.append("$subhw.Update()").append(LINE_BREAK);
-        code.append("}").append(LINE_BREAK);
-        code.append("ForEach ($sensor in $hw.Sensors)").append(LINE_BREAK);
-        code.append("{").append(LINE_BREAK);
-        code.append("$sensor").append(LINE_BREAK);
-        code.append("Write-Host \"\"").append(LINE_BREAK);
-        code.append("}").append(LINE_BREAK);
-        code.append("}");
+	private static String sensorsQueryLoop() {
+		StringBuilder code = new StringBuilder();
 
-        return code.toString();
-    }
+		code.append("$PC.Open()").append(LINE_BREAK);
 
-    static String generateScript() {
-        File tmpFile = null;
-        FileWriter writer = null;
-        String scriptPath = null;
+		code.append("ForEach ($hw in $PC.Hardware)").append(LINE_BREAK);
+		code.append("{").append(LINE_BREAK);
+		code.append("$hw").append(LINE_BREAK);
+		code.append("$hw.Update()").append(LINE_BREAK);
+		code.append("ForEach ($subhw in $hw.SubHardware)").append(LINE_BREAK);
+		code.append("{").append(LINE_BREAK);
+		code.append("$subhw.Update()").append(LINE_BREAK);
+		code.append("}").append(LINE_BREAK);
+		code.append("ForEach ($sensor in $hw.Sensors)").append(LINE_BREAK);
+		code.append("{").append(LINE_BREAK);
+		code.append("$sensor").append(LINE_BREAK);
+		code.append("Write-Host \"\"").append(LINE_BREAK);
+		code.append("}").append(LINE_BREAK);
+		code.append("}");
 
-        try {
-            tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
-            tmpFile.deleteOnExit();
-            writer = new FileWriter(tmpFile);
-            writer.write(getPowerShellScript());
-            writer.flush();
-            writer.close();
-        } catch (Exception ex) {
-            LOGGER.error("Cannot create PowerShell script file", ex);
-            return "Error";
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException ioe) {
-                LOGGER.warn("Error when finish writing Powershell script file", ioe);
-            }
-        }
-        if (tmpFile != null) {
-            scriptPath = tmpFile.getAbsolutePath();
-        }
-        
-        return scriptPath;
-    }
+		return code.toString();
+	}
 
-    private static String getPowerShellScript() {
-        StringBuilder script = new StringBuilder();
+	static String generateScript() {
+		File tmpFile = null;
+		FileWriter writer = null;
+		String scriptPath = null;
 
-        script.append(dllImport());
-        script.append(newComputerInstance());
-        script.append(sensorsQueryLoop());
+		try {
+			tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
+			tmpFile.deleteOnExit();
+			writer = new FileWriter(tmpFile);
+			writer.write(getPowerShellScript());
+			writer.flush();
+			writer.close();
+		} catch (Exception ex) {
+			LOGGER.error("Cannot create PowerShell script file", ex);
+			return "Error";
+		} finally {
+			try {
+				if (writer != null) {
+					writer.close();
+				}
+			} catch (IOException ioe) {
+				LOGGER.warn("Error when finish writing Powershell script file", ioe);
+			}
+		}
+		if (tmpFile != null) {
+			scriptPath = tmpFile.getAbsolutePath();
+		}
 
-        return script.toString();
-    }
+		return scriptPath;
+	}
+
+	private static String getPowerShellScript() {
+		StringBuilder script = new StringBuilder();
+
+		script.append(dllImport());
+		script.append(newComputerInstance());
+		script.append(sensorsQueryLoop());
+
+		return script.toString();
+	}
 }
