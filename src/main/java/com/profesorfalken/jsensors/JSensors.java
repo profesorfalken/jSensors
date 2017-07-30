@@ -15,19 +15,15 @@
  */
 package com.profesorfalken.jsensors;
 
-import com.profesorfalken.jsensors.model.components.Component;
-import com.profesorfalken.jsensors.model.components.Components;
-import com.profesorfalken.jsensors.model.components.Cpu;
-import com.profesorfalken.jsensors.model.components.Disk;
-import com.profesorfalken.jsensors.model.components.Gpu;
-import com.profesorfalken.jsensors.model.sensors.Fan;
-import com.profesorfalken.jsensors.model.sensors.Load;
-import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.profesorfalken.jsensors.model.components.Components;
+import com.profesorfalken.jsensors.standalone.ConsoleOutput;
+import com.profesorfalken.jsensors.standalone.GuiOutput;
 
 /**
  * Main class of JSensors. <br>
@@ -107,63 +103,21 @@ public enum JSensors {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Scanning sensors data...");
-		
-		
+		boolean guiMode = false;
 		Map<String, String> overriddenConfig = new HashMap<String, String>();
 		for (final String arg : args) {
 			if ("--debug".equals(arg)) {
 				overriddenConfig.put("debugMode", "true");
 			}
-		}
-
-		Components components = JSensors.get.config(overriddenConfig).components();
-
-		List<Cpu> cpus = components.cpus;
-		if (cpus != null) {
-			for (final Cpu cpu : cpus) {
-				System.out.println("Found CPU component: " + cpu.name);
-				readComponent(cpu);
+			if ("--gui".equals(arg)) {
+				guiMode = true;
 			}
 		}
-
-		List<Gpu> gpus = components.gpus;
-		if (gpus != null) {
-			for (final Gpu gpu : gpus) {
-				System.out.println("Found GPU component: " + gpu.name);
-				readComponent(gpu);
-			}
-		}
-
-		List<Disk> disks = components.disks;
-		if (disks != null) {
-			for (final Disk disk : disks) {
-				System.out.println("Found disk component: " + disk.name);
-				readComponent(disk);
-			}
-		}
+		
+		if (guiMode) {
+			GuiOutput.showOutput(overriddenConfig);
+		} else {
+			ConsoleOutput.showOutput(overriddenConfig);
+		}				
 	}
-
-	//Read component values in standalone mode
-	private static void readComponent(Component component) {
-		if (component.sensors != null) {
-			System.out.println("Sensors: ");
-
-			List<Temperature> temps = component.sensors.temperatures;
-			for (final Temperature temp : temps) {
-				System.out.println(temp.name + ": " + temp.value + " C");
-			}
-
-			List<Fan> fans = component.sensors.fans;
-			for (final Fan fan : fans) {
-				System.out.println(fan.name + ": " + fan.value + " RPM");
-			}
-			
-			List<Load> loads = component.sensors.loads;
-			for (final Load load : loads) {
-				System.out.println(load.name + ": " + load.value);
-			}
-		}
-	}
-	
 }
