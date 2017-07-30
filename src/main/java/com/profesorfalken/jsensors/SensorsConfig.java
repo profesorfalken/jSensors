@@ -40,7 +40,7 @@ final class SensorsConfig {
 	private SensorsConfig() {
 	}
 
-	public static Properties getConfig() {
+	private static Properties getConfig() {
 		if (config == null) {
 			config = new Properties();
 			try {
@@ -54,7 +54,7 @@ final class SensorsConfig {
 		return config;
 	}
 
-	public static Map<String, String> getConfigMap() {
+	static Map<String, String> getConfigMap() {
 		Map<String, String> returnMap = new HashMap<String, String>();
 		Properties configProps = getConfig();
 
