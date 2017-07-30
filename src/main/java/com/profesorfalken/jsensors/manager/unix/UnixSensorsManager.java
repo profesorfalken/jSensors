@@ -76,7 +76,7 @@ public class UnixSensorsManager extends SensorsManager {
 		try {
 			jnaProxy = Native.loadLibrary("sensors", CSensors.class);
 		} catch (UnsatisfiedLinkError err) {
-			LOGGER.debug("Cannot find library in system, using embedded one");
+			LOGGER.info("Cannot find library in system, using embedded one");
 			try {
 				String libPath = SensorsUtils.generateLibTmpPath("/lib/linux/", "libsensors.so.4.4.0");
 				jnaProxy = Native.loadLibrary(libPath, CSensors.class);
