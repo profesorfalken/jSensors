@@ -21,6 +21,7 @@ import com.profesorfalken.jsensors.model.components.Cpu;
 import com.profesorfalken.jsensors.model.components.Disk;
 import com.profesorfalken.jsensors.model.components.Gpu;
 import com.profesorfalken.jsensors.model.sensors.Fan;
+import com.profesorfalken.jsensors.model.sensors.Load;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.util.HashMap;
 import java.util.List;
@@ -45,16 +46,27 @@ public enum JSensors {
 
 	final Map<String, String> baseConfig;
 
-	Map<String, String> usedConfig = null;
+	private Map<String, String> usedConfig = null;
 
 	private JSensors() {
 		// Load config from file
 		baseConfig = SensorsConfig.getConfigMap();
 	}
 
+	/**
+	 * Updates default config (configurationon jsensors.properties) with a 
+	 * new one
+	 * 
+	 * @param config maps that contains the new config values
+	 * @return {@link JSensors} instance
+	 */
 	public JSensors config(Map<String, String> config) {
-		// Override config
-		this.usedConfig = this.baseConfig;
+		// Initialise config if necessary
+		if (this.usedConfig == null) {
+			this.usedConfig = this.baseConfig;
+		}
+		
+		//Override values
 		for (final Map.Entry<String, String> entry : config.entrySet()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug(String.format("Overriding config entry %s, %s by %s", entry.getKey(),
@@ -66,6 +78,16 @@ public enum JSensors {
 		return this;
 	}
 
+	/**
+	 * Retrieve all sensors components values. 
+	 * The supported sensors types are: 
+	 * <li>Fan: fan speed</li>
+	 * <li>Load: component load %</li>
+	 * <li>Temperature: temperature of sensor in C(Centigrader) or F(Farenheit) depending on system settings</li>
+	 * <p>
+	 * 
+	 * @return {@link Components} object that containt the lists of components
+	 */
 	public Components components() {
 		if (this.usedConfig == null) {
 			this.usedConfig = new HashMap<String, String>();
@@ -79,8 +101,15 @@ public enum JSensors {
 		return components;
 	}
 
+	/**
+	 * Standalone entry point
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		System.out.println("Scanning sensors data...");
+		
+		
 		Map<String, String> overriddenConfig = new HashMap<String, String>();
 		for (final String arg : args) {
 			if ("--debug".equals(arg)) {
@@ -115,6 +144,7 @@ public enum JSensors {
 		}
 	}
 
+	//Read component values in standalone mode
 	private static void readComponent(Component component) {
 		if (component.sensors != null) {
 			System.out.println("Sensors: ");
@@ -128,6 +158,12 @@ public enum JSensors {
 			for (final Fan fan : fans) {
 				System.out.println(fan.name + ": " + fan.value + " RPM");
 			}
+			
+			List<Load> loads = component.sensors.loads;
+			for (final Load load : loads) {
+				System.out.println(load.name + ": " + load.value);
+			}
 		}
 	}
+	
 }
