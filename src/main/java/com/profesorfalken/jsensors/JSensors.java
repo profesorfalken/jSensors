@@ -50,10 +50,10 @@ public enum JSensors {
 	}
 
 	/**
-	 * Updates default config (configurationon jsensors.properties) with a 
-	 * new one
+	 * Updates default config (configurationon jsensors.properties) with a new one
 	 * 
-	 * @param config maps that contains the new config values
+	 * @param config
+	 *            maps that contains the new config values
 	 * @return {@link JSensors} instance
 	 */
 	public JSensors config(Map<String, String> config) {
@@ -61,8 +61,8 @@ public enum JSensors {
 		if (this.usedConfig == null) {
 			this.usedConfig = this.baseConfig;
 		}
-		
-		//Override values
+
+		// Override values
 		for (final Map.Entry<String, String> entry : config.entrySet()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug(String.format("Overriding config entry %s, %s by %s", entry.getKey(),
@@ -75,11 +75,11 @@ public enum JSensors {
 	}
 
 	/**
-	 * Retrieve all sensors components values. 
-	 * The supported sensors types are: 
+	 * Retrieve all sensors components values. The supported sensors types are:
 	 * <li>Fan: fan speed</li>
 	 * <li>Load: component load %</li>
-	 * <li>Temperature: temperature of sensor in C(Centigrader) or F(Farenheit) depending on system settings</li>
+	 * <li>Temperature: temperature of sensor in C(Centigrader) or F(Farenheit)
+	 * depending on system settings</li>
 	 * <p>
 	 * 
 	 * @return {@link Components} object that containt the lists of components
@@ -113,11 +113,11 @@ public enum JSensors {
 				guiMode = true;
 			}
 		}
-		
+
 		if (guiMode) {
 			GuiOutput.showOutput(overriddenConfig);
 		} else {
 			ConsoleOutput.showOutput(overriddenConfig);
-		}				
+		}
 	}
 }
