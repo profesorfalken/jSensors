@@ -1,15 +1,36 @@
 [COMPONENT]
+DISK
+Label: Virtual device
+Temp temp1:27.8
+Temp temp2:29.8
+[COMPONENT]
 CPU
-Label: Pentium G3258 @ 3200Mhz
-Temp Core 1: 25.0
-Temp Core 2: 25.0
-Fan 1: 850
+Label: ISA adapter
+Temp Physical id 0:50.0
+Temp Core 0:46.0
+Temp Core 1:51.0
+Temp Core 2:48.0
+Temp Core 3:50.0
+[COMPONENT]
+CPU
+Label: ISA adapter
+Fan fan1:0.0
+Fan fan2:1956.0
+Fan fan3:0.0
+Fan fan4:0.0
+Fan fan5:0.0
+Temp SYSTIN:46.0
+Temp CPUTIN:127.5
+Temp AUXTIN0:42.0
+Temp AUXTIN1:115.0
+Temp AUXTIN2:109.0
+Temp AUXTIN3:24.0
+Temp SMBUSMASTER 0:0.0
+Temp PECI Agent 0:47.5
+Temp PCH_CHIP_CPU_MAX_TEMP:0.0
+Temp PCH_CHIP_TEMP:0.0
 [COMPONENT]
 GPU
 Label: MSI Nvidia 750 Ti
 Temp: 32.5
 Fan 1: 998
-[COMPONENT]
-DISK
-Label: Seagate 1GB
-Temp: 31.0
