@@ -24,9 +24,11 @@ import java.io.File;
  *
  * @author Javier Garcia Alonso
  */
-public interface CSensors extends Library {
+public interface CSensors extends Library {	
 
 	public int sensors_init(File input);
+	
+	public void sensors_cleanup();
 
 	public CChip sensors_get_detected_chips(CChip[] match, IntByReference nr);
 

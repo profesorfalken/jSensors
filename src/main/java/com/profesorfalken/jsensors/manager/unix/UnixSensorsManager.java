@@ -60,7 +60,14 @@ public class UnixSensorsManager extends SensorsManager {
 			return "";
 		}
 
-		return normalizeSensorsData(cSensors);
+		String normalizedData = "";
+		try {
+			normalizedData = normalizeSensorsData(cSensors);
+		} finally {
+			cSensors.sensors_cleanup();
+		}
+		
+		return normalizedData;
 	}
 
 	private CSensors loadDynamicLibrary() {
