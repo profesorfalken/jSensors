@@ -1,5 +1,6 @@
 ![](https://img.shields.io/maven-central/v/com.profesorfalken/jSensors.svg)
 ![](https://img.shields.io/github/license/profesorfalken/jSensors.svg)
+![](https://travis-ci.org/profesorfalken/jSensors.svg)
 
 # jSensors
 Monitorize all the hardware sensors of your PC using Java
