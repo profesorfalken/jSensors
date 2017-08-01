@@ -84,7 +84,7 @@ public class GuiOutput {
 		}
 
 		// Read component values in standalone mode
-		private  void addComponent(Component component, DefaultTableModel model) {
+		private void addComponent(Component component, DefaultTableModel model) {
 			if (component.sensors != null) {
 
 				List<Temperature> temps = component.sensors.temperatures;

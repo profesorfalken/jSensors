@@ -15,7 +15,7 @@ import com.profesorfalken.jsensors.model.sensors.Temperature;
 
 public class ConsoleOutput {
 	public static void showOutput(Map<String, String> config) {
-		System.out.println("Scanning sensors data...");						
+		System.out.println("Scanning sensors data...");
 
 		Components components = JSensors.get.config(config).components();
 
@@ -43,7 +43,7 @@ public class ConsoleOutput {
 			}
 		}
 	}
-	
+
 	// Read component values in standalone mode
 	private static void readComponent(Component component) {
 		if (component.sensors != null) {
