@@ -76,10 +76,12 @@ public enum JSensors {
 
 	/**
 	 * Retrieve all sensors components values. The supported sensors types are:
+	 * <ul>
 	 * <li>Fan: fan speed</li>
 	 * <li>Load: component load %</li>
 	 * <li>Temperature: temperature of sensor in C(Centigrader) or F(Farenheit)
 	 * depending on system settings</li>
+	 * </ul>
 	 * <p>
 	 * 
 	 * @return {@link Components} object that containt the lists of components
