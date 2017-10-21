@@ -102,7 +102,7 @@ public enum JSensors {
 	/**
 	 * Standalone entry point
 	 * 
-	 * @param args
+	 * @param args program arguments
 	 */
 	public static void main(String[] args) {
 		boolean guiMode = false;
