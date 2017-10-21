@@ -60,7 +60,14 @@ class PowerShellScriptHelper {
 	private static String sensorsQueryLoop() {
 		StringBuilder code = new StringBuilder();
 
+		code.append("try").append(LINE_BREAK);
+		code.append("{").append(LINE_BREAK);
+		code.append("$PC.Open()").append(LINE_BREAK);		
+		code.append("}").append(LINE_BREAK);
+		code.append("catch").append(LINE_BREAK);
+		code.append("{").append(LINE_BREAK);
 		code.append("$PC.Open()").append(LINE_BREAK);
+		code.append("}").append(LINE_BREAK);
 
 		code.append("ForEach ($hw in $PC.Hardware)").append(LINE_BREAK);
 		code.append("{").append(LINE_BREAK);

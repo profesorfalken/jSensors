@@ -43,8 +43,7 @@ public class PowerShellOperations {
 		String rawData = null;
 		try {
 			powershell = PowerShell.openSession();
-			powershell.executeCommand(PowerShellScriptHelper.generateScript());
-			rawData = powershell.executeCommand(PowerShellScriptHelper.generateScript()).getCommandOutput();
+			rawData = powershell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
 		} catch (PowerShellNotAvailableException ex) {
 			LOGGER.error("Cannot find PowerShell in your system. Please install it", ex);
 		} finally {
