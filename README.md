@@ -90,6 +90,24 @@ It will retrieve a list of hardware components: CPUs, GPUs, Disks...
 
 Same for other hardware components as GPU or Disks.
 
+### Use as a standalone application ###
+
+You can also directly execute jSensors in your machine. 
+
+```
+    java -jar jsensors-2.0.2.jar
+```
+
+To get a console output. 
+
+You can force also a simple gui with all the sensors data:
+
+```
+    java -jar jsensors-2.0.2.jar --gui
+```
+
+Result:
+
 ## Configuring jSensors ##
 
 In order to change jSensors configuration you can either:
