@@ -92,21 +92,24 @@ Same for other hardware components as GPU or Disks.
 
 ### Use as a standalone application ###
 
-You can also directly execute jSensors in your machine. 
+Execute jSensors and get all sensors data: 
 
 ```
     java -jar jsensors-2.0.2.jar
 ```
 
-To get a console output. 
+This will generate a console output. 
 
-You can force also a simple gui with all the sensors data:
+
+It is also possible to show a simple gui with all the sensors data:
 
 ```
     java -jar jsensors-2.0.2.jar --gui
 ```
 
 Result:
+
+![jSensorsGUI](https://raw.githubusercontent.com/profesorfalken/profesorfalken.github.io/master/files/jsensors-gui.png)
 
 ## Configuring jSensors ##
 
