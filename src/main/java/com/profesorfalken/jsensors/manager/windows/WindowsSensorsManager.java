@@ -71,6 +71,10 @@ public class WindowsSensorsManager extends SensorsManager {
                     normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("DISK").append(LINE_BREAK);
                     readingHardLabel = true;
+                } else if ("Mainboard".equals(hardwareType)) {
+                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
+                    normalizedSensorsData.append("MOBO").append(LINE_BREAK);
+                    readingHardLabel = false;
                 }
                 continue;
             }
