@@ -119,16 +119,19 @@ In order to change jSensors configuration you can either:
 
 You only have to create in your classpaht a file with the name _jsensors.properties_.
 
-For the moment (v1.0-PreAlfa) the only modificable parameters (and its default values) are: 
-
-    # Used for unit testing 
+For the moment the only modificable parameters (and its default values) are: 
+    
+    # Test mode
+    # REAL: test on real hardware
+    # STUB: use simulated/hardcoded results to test
     testMode=REAL
-    stubFile=stubFileName
-
+    # Stub Content
+    # string value of the simulated results
+    stubContent=""
     # Debug mode
     # If activated it logs in console all retrieved details
     debugMode=false
-    
+     
 #### Override config element for one request ####
   
 When performing a request we can easily override config elements: 
