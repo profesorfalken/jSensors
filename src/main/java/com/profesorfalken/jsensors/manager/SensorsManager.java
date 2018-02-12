@@ -21,10 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.profesorfalken.jsensors.model.components.Components;
-import com.profesorfalken.jsensors.model.components.Cpu;
-import com.profesorfalken.jsensors.model.components.Disk;
-import com.profesorfalken.jsensors.model.components.Gpu;
+import com.profesorfalken.jsensors.model.components.*;
 import com.profesorfalken.jsensors.model.sensors.Fan;
 import com.profesorfalken.jsensors.model.sensors.Load;
 import com.profesorfalken.jsensors.model.sensors.Sensors;
@@ -49,6 +46,7 @@ public abstract class SensorsManager {
 		List<Cpu> cpus = new ArrayList<Cpu>();
 		List<Gpu> gpus = new ArrayList<Gpu>();
 		List<Disk> disks = new ArrayList<Disk>();
+		List<Mobo> mobos = new ArrayList<Mobo>();
 
 		String normalizedSensorsData = getSensorsData();
 
@@ -61,10 +59,12 @@ public abstract class SensorsManager {
 				gpus.add(getGpu(componentData));
 			} else if (componentData.startsWith("DISK")) {
 				disks.add(getDisk(componentData));
+			} else if (componentData.startsWith("MOBO")) {
+				mobos.add(getMobo(componentData));
 			}
 		}
 
-		return new Components(cpus, gpus, disks);
+		return new Components(cpus, gpus, disks, mobos);
 	}
 
 	private Cpu getCpu(String cpuData) {
@@ -77,6 +77,10 @@ public abstract class SensorsManager {
 
 	private Disk getDisk(String diskData) {
 		return new Disk(getName(diskData), getSensors(diskData));
+	}
+
+	private Mobo getMobo(String moboData) {
+		return new Mobo(getName(moboData), getSensors(moboData));
 	}
 
 	private static String getName(String componentData) {

@@ -76,6 +76,11 @@ class PowerShellScriptHelper {
 		code.append("ForEach ($subhw in $hw.SubHardware)").append(LINE_BREAK);
 		code.append("{").append(LINE_BREAK);
 		code.append("$subhw.Update()").append(LINE_BREAK);
+		code.append("ForEach ($sensor in $subhw.Sensors)").append(LINE_BREAK);
+		code.append("{").append(LINE_BREAK);
+		code.append("$sensor").append(LINE_BREAK);
+		code.append("Write-Host \"\"").append(LINE_BREAK);
+		code.append("}").append(LINE_BREAK);
 		code.append("}").append(LINE_BREAK);
 		code.append("ForEach ($sensor in $hw.Sensors)").append(LINE_BREAK);
 		code.append("{").append(LINE_BREAK);
