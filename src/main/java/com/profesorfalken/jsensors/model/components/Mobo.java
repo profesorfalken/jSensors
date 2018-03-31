@@ -15,22 +15,16 @@
  */
 package com.profesorfalken.jsensors.model.components;
 
-import java.util.List;
+import com.profesorfalken.jsensors.model.sensors.Sensors;
 
 /**
  *
- * @author Javier Garcia Alonso
+ * @author Roel Goossens
  */
-public class Components {
-	public final List<Cpu> cpus;
-	public final List<Gpu> gpus;
-	public final List<Disk> disks;
-	public final List<Mobo> mobos;
+public class Mobo extends Component {
 
-	public Components(List<Cpu> cpus, List<Gpu> gpus, List<Disk> disks, List<Mobo> mobos) {
-		this.cpus = cpus;
-		this.gpus = gpus;
-		this.disks = disks;
-		this.mobos = mobos;
+	public Mobo(String name, Sensors sensors) {
+		super(name, sensors);
 	}
+
 }

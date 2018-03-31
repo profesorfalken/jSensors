@@ -39,14 +39,14 @@ Monitorize all the hardware sensors of your PC using Java
 
 ## Installation ##
 
-To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/1.0.2
+To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.0.2
 
 For example, for Maven you have just to add to your pom.xml: 
 
      <dependency>
           <groupId>com.profesorfalken</groupId>
           <artifactId>jSensors</artifactId>
-          <version>1.0.2</version>
+          <version>2.0.2</version>
      </dependency>
 
 
@@ -90,6 +90,27 @@ It will retrieve a list of hardware components: CPUs, GPUs, Disks...
 
 Same for other hardware components as GPU or Disks.
 
+### Use as a standalone application ###
+
+Execute jSensors and get all sensors data: 
+
+```
+    java -jar jsensors-2.0.2.jar
+```
+
+This will generate a console output. 
+
+
+It is also possible to show a simple gui with all the sensors data:
+
+```
+    java -jar jsensors-2.0.2.jar --gui
+```
+
+Result:
+
+![jSensorsGUI](https://raw.githubusercontent.com/profesorfalken/profesorfalken.github.io/master/files/jsensors-gui.png)
+
 ## Configuring jSensors ##
 
 In order to change jSensors configuration you can either:
@@ -98,16 +119,19 @@ In order to change jSensors configuration you can either:
 
 You only have to create in your classpaht a file with the name _jsensors.properties_.
 
-For the moment (v1.0-PreAlfa) the only modificable parameters (and its default values) are: 
-
-    # Used for unit testing 
+For the moment the only modificable parameters (and its default values) are: 
+    
+    # Test mode
+    # REAL: test on real hardware
+    # STUB: use simulated/hardcoded results to test
     testMode=REAL
-    stubFile=stubFileName
-
+    # Stub Content
+    # string value of the simulated results
+    stubContent=""
     # Debug mode
     # If activated it logs in console all retrieved details
     debugMode=false
-    
+     
 #### Override config element for one request ####
   
 When performing a request we can easily override config elements: 
