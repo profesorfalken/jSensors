@@ -37,16 +37,18 @@ Monitorize all the hardware sensors of your PC using Java
     Temp temp1: 67.0 C
     Temp temp2: 67.0 C
 
+**IMPORTANT NOTE:** if you are getting 0.0 as temperature value, try to launch as Administrator
+
 ## Installation ##
 
-To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.0.2
+To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.1
 
 For example, for Maven you have just to add to your pom.xml: 
 
      <dependency>
           <groupId>com.profesorfalken</groupId>
           <artifactId>jSensors</artifactId>
-          <version>2.0.2</version>
+          <version>2.1</version>
      </dependency>
 
 
