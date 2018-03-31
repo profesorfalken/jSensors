@@ -1,3 +1,9 @@
 /target/
 /.classpath
 /.project
+/.idea
+null
+*.iml
+.gitignore
+.vscode/.gitignore
+/jSensors.iml
