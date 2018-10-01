@@ -41,19 +41,16 @@ Monitorize all the hardware sensors of your PC using Java
 
 ## Installation ##
 
-To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.1
+To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.1.1
 
 For example, for Maven you have just to add to your pom.xml: 
 
      <dependency>
           <groupId>com.profesorfalken</groupId>
           <artifactId>jSensors</artifactId>
-          <version>2.1</version>
+          <version>2.1.1</version>
      </dependency>
 
-
-Instead, you can direct download the standalone JAR file (that includes its dependencies) and add it to your classpath. 
-[TODO]
 
 ## Basic Usage ##
 
@@ -94,10 +91,12 @@ Same for other hardware components as GPU or Disks.
 
 ### Use as a standalone application ###
 
+First of all, download the JAR file containing all dependencies: https://github.com/profesorfalken/profesorfalken.github.io/raw/master/files/jSensors-2.1.1-jar-with-dependencies.jar
+
 Execute jSensors and get all sensors data: 
 
 ```
-    java -jar jsensors-2.0.2.jar
+    java -jar jsensors-2.1.1-jar-with-dependencies.jar
 ```
 
 This will generate a console output. 
@@ -106,7 +105,7 @@ This will generate a console output.
 It is also possible to show a simple gui with all the sensors data:
 
 ```
-    java -jar jsensors-2.0.2.jar --gui
+    java -jar jsensors-2.1.1-jar-with-dependencies.jar --gui
 ```
 
 Result:
