@@ -32,6 +32,8 @@ class PowerShellScriptHelper {
 
 	private static final String LINE_BREAK = "\r\n";
 
+	private static File tmpFile = null;
+
 	// Hides constructor
 	private PowerShellScriptHelper() {
 	}
@@ -93,34 +95,32 @@ class PowerShellScriptHelper {
 	}
 
 	static String generateScript() {
-		File tmpFile = null;
 		FileWriter writer = null;
 		String scriptPath = null;
 
-		try {
-			tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
-			tmpFile.deleteOnExit();
-			writer = new FileWriter(tmpFile);
-			writer.write(getPowerShellScript());
-			writer.flush();
-			writer.close();
-		} catch (Exception ex) {
-			LOGGER.error("Cannot create PowerShell script file", ex);
-			return "Error";
-		} finally {
+		if (tmpFile == null) {
 			try {
-				if (writer != null) {
-					writer.close();
+				tmpFile = File.createTempFile("jsensors_" + new Date().getTime(), ".ps1");
+				tmpFile.deleteOnExit();
+				writer = new FileWriter(tmpFile);
+				writer.write(getPowerShellScript());
+				writer.flush();
+				writer.close();
+			} catch (Exception ex) {
+				LOGGER.error("Cannot create PowerShell script file", ex);
+				return "Error";
+			} finally {
+				try {
+					if (writer != null) {
+						writer.close();
+					}
+				} catch (IOException ioe) {
+					LOGGER.warn("Error when finish writing Powershell script file", ioe);
 				}
-			} catch (IOException ioe) {
-				LOGGER.warn("Error when finish writing Powershell script file", ioe);
 			}
 		}
-		if (tmpFile != null) {
-			scriptPath = tmpFile.getAbsolutePath();
-		}
 
-		return scriptPath;
+		return tmpFile.getAbsolutePath();
 	}
 
 	private static String getPowerShellScript() {

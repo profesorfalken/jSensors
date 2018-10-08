@@ -24,12 +24,22 @@ import org.slf4j.LoggerFactory;
  *
  * @author Javier Garcia Alonso
  */
-public class PowerShellOperations {
+public enum PowerShellOperations {
+	GET;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
-	// Hides constructor
-	private PowerShellOperations() {
+	private PowerShell powerShell = null;
+	private boolean initialized;
 
+	// Hides constructor
+	PowerShellOperations() {
+		String rawData = null;
+		this.powerShell = PowerShell.openSession();
+	}
+
+	public boolean isInitialized() {
+		return this.initialized;
 	}
 
 	public static boolean isAdministrator() {
@@ -38,8 +48,8 @@ public class PowerShellOperations {
 		return "true".equalsIgnoreCase(PowerShell.executeSingleCommand(command).getCommandOutput());
 	}
 
-	public static String getRawSensorsData() {
-		PowerShell powershell = null;
+	public String getRawSensorsData() {
+		/*PowerShell powershell = null;
 		String rawData = null;
 		try {
 			powershell = PowerShell.openSession();
@@ -50,7 +60,7 @@ public class PowerShellOperations {
 			if (powershell != null) {
 				powershell.close();
 			}
-		}
-		return rawData;
+		}*/
+		return this.powerShell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
 	}
 }

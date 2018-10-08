@@ -36,7 +36,8 @@ public class WindowsSensorsManager extends SensorsManager {
 
     @Override
     public String getSensorsData() {
-        String rawSensorsData = PowerShellOperations.getRawSensorsData();
+
+        String rawSensorsData = PowerShellOperations.GET.getRawSensorsData();
 
         if (debugMode) {
             LOGGER.info("RawSensorData: " + rawSensorsData);

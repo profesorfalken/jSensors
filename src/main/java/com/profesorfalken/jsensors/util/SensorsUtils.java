@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 public class SensorsUtils {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
+	private static File tempFile = null;
+
 	// Hides constructor
 	private SensorsUtils() {
 
@@ -40,22 +42,24 @@ public class SensorsUtils {
 	}
 
 	public static String generateLibTmpPath(String path, String libName) {
-		InputStream in = SensorsUtils.class.getResourceAsStream(path + libName);
-		File tempFile;
-		try {
-			tempFile = File.createTempFile(libName, "");
-			byte[] buffer = new byte[1024];
-			int read;
-			FileOutputStream fos = new FileOutputStream(tempFile);
-			while ((read = in.read(buffer)) != -1) {
-				fos.write(buffer, 0, read);
-			}
-			fos.close();
-			in.close();
-		} catch (IOException ex) {
-			LOGGER.error("Cannot generate temporary file", ex);
-			return "";
-		}
+	    if (tempFile == null) {
+            InputStream in = SensorsUtils.class.getResourceAsStream(path + libName);
+            try {
+                tempFile = File.createTempFile(libName, "");
+                tempFile.deleteOnExit();
+                byte[] buffer = new byte[1024];
+                int read;
+                FileOutputStream fos = new FileOutputStream(tempFile);
+                while ((read = in.read(buffer)) != -1) {
+                    fos.write(buffer, 0, read);
+                }
+                fos.close();
+                in.close();
+            } catch (IOException ex) {
+                LOGGER.error("Cannot generate temporary file", ex);
+                return "";
+            }
+        }
 
 		return tempFile.getAbsolutePath();
 	}
