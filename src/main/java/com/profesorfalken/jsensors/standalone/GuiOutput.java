@@ -19,13 +19,11 @@ import java.awt.EventQueue;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.profesorfalken.jsensors.JSensors;
+import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
 import com.profesorfalken.jsensors.model.components.Component;
 import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.model.components.Cpu;
@@ -34,6 +32,7 @@ import com.profesorfalken.jsensors.model.components.Gpu;
 import com.profesorfalken.jsensors.model.sensors.Fan;
 import com.profesorfalken.jsensors.model.sensors.Load;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
+import com.profesorfalken.jsensors.util.OSDetector;
 
 /**
  * Provides an output using a Swing based GUI
@@ -67,6 +66,11 @@ public class GuiOutput {
 			setSize(600, 400);
 			setLocationRelativeTo(null);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+			if (OSDetector.isWindows() && !PowerShellOperations.isAdministrator()) {
+				JOptionPane.showMessageDialog(this,
+						"You have not executed jSensors in Administrator mode, so CPU temperature sensors will not be detected.");
+			}
 
 			new GuiUpdater(this).execute();
 

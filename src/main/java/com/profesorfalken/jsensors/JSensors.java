@@ -18,6 +18,8 @@ package com.profesorfalken.jsensors;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
+import com.profesorfalken.jsensors.util.OSDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,16 @@ public enum JSensors {
 	final Map<String, String> baseConfig;
 
 	private Map<String, String> usedConfig = null;
+
+	static {
+		checkRights();
+	}
+
+	private static void checkRights() {
+		if (OSDetector.isWindows() && !PowerShellOperations.isAdministrator()) {
+			LOGGER.warn("You have not executed jSensors in Administrator mode, so CPU temperature sensors will not be detected.");
+		}
+	}
 
 	private JSensors() {
 		// Load config from file
