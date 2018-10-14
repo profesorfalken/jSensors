@@ -30,16 +30,9 @@ public enum PowerShellOperations {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
 	private PowerShell powerShell = null;
-	private boolean initialized;
 
-	// Hides constructor
 	PowerShellOperations() {
-		String rawData = null;
 		this.powerShell = PowerShell.openSession();
-	}
-
-	public boolean isInitialized() {
-		return this.initialized;
 	}
 
 	public static boolean isAdministrator() {
@@ -49,18 +42,6 @@ public enum PowerShellOperations {
 	}
 
 	public String getRawSensorsData() {
-		/*PowerShell powershell = null;
-		String rawData = null;
-		try {
-			powershell = PowerShell.openSession();
-			rawData = powershell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
-		} catch (PowerShellNotAvailableException ex) {
-			LOGGER.error("Cannot find PowerShell in your system. Please install it", ex);
-		} finally {
-			if (powershell != null) {
-				powershell.close();
-			}
-		}*/
 		return this.powerShell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
 	}
 }
