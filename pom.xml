@@ -168,7 +168,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jPowerShell</artifactId>
-			<version>3.0</version>
+			<version>3.0.1</version>
 		</dependency>
 	</dependencies>
 	<properties>
