@@ -4,6 +4,4 @@
 /.idea
 null
 *.iml
-.gitignore
-.vscode/.gitignore
 /jSensors.iml
