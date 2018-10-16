@@ -91,12 +91,12 @@ Same for other hardware components as GPU or Disks.
 
 ### Use as a standalone application ###
 
-First of all, download the JAR file containing all dependencies: https://github.com/profesorfalken/profesorfalken.github.io/raw/master/files/jSensors-2.1.1-jar-with-dependencies.jar
+First of all, download the JAR file containing all dependencies: https://github.com/profesorfalken/profesorfalken.github.io/raw/master/files/jSensors-2.2-jar-with-dependencies.jar
 
 Execute jSensors and get all sensors data: 
 
 ```
-    java -jar jsensors-2.1.1-jar-with-dependencies.jar
+    java -jar jsensors-2.2-jar-with-dependencies.jar
 ```
 
 This will generate a console output. 
@@ -105,7 +105,7 @@ This will generate a console output.
 It is also possible to show a simple gui with all the sensors data:
 
 ```
-    java -jar jsensors-2.1.1-jar-with-dependencies.jar --gui
+    java -jar jsensors-2.2-jar-with-dependencies.jar --gui
 ```
 
 Result:
