@@ -30,7 +30,7 @@ import com.sun.jna.ptr.IntByReference;
 public class TestSensorsLinux {
 
 	public static void main(String[] args) {
-		CSensors INSTANCE = (CSensors) Native.loadLibrary("sensors", CSensors.class);
+		CSensors INSTANCE = Native.loadLibrary("sensors", CSensors.class);
 
 		System.err.println("Return method: " + INSTANCE.sensors_init(null));
 
@@ -59,7 +59,7 @@ public class TestSensorsLinux {
 					int returnValue = INSTANCE.sensors_get_value(result, subFeature.number, pValue);
 					System.out.println(label + " feature " + subFeature.name + ": " + pValue.getValue());
 					System.out.println(label + "returnValue: " + returnValue);
-					System.out.println("");
+					System.out.println();
 
 					numSubFeature++;
 				}

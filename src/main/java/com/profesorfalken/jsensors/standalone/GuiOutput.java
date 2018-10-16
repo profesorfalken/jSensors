@@ -138,7 +138,7 @@ public class GuiOutput {
 			}
 
 			@Override
-			protected Void doInBackground() throws Exception {
+			protected Void doInBackground() {
 				while (true) {
 					table.setModel(calculateModel());
 					//Thread.sleep(2000);

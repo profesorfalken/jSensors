@@ -56,7 +56,7 @@ public enum JSensors {
 		}
 	}
 
-	private JSensors() {
+	JSensors() {
 		// Load config from file
 		baseConfig = SensorsConfig.getConfigMap();
 	}
