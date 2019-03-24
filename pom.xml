@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.profesorfalken</groupId>
 	<artifactId>jSensors</artifactId>
-	<version>2.2</version>
+	<version>2.2.1</version>
 	<packaging>jar</packaging>
 
 	<name>jSensors</name>
@@ -152,7 +152,7 @@
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
-			<version>4.5.1</version>
+			<version>5.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -168,7 +168,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jPowerShell</artifactId>
-			<version>3.0.1</version>
+			<version>3.0.4</version>
 		</dependency>
 	</dependencies>
 	<properties>
