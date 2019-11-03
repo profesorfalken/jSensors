@@ -40,21 +40,19 @@ class PowerShellScriptHelper {
 
 	private static String dllImport() {
 		return "[System.Reflection.Assembly]::LoadFile(\""
-				+ SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll") + "\")" + " | Out-Null"
+				+ SensorsUtils.generateLibTmpPath("/lib/win/", "LibreHardwareMonitorLib.dll") + "\")" + " | Out-Null"
 				+ LINE_BREAK;
 	}
 
 	private static String newComputerInstance() {
 		StringBuilder code = new StringBuilder();
 
-		code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
+		code.append("$PC = New-Object LibreHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
 
-		code.append("$PC.MainboardEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.CPUEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.RAMEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.GPUEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.FanControllerEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.HDDEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.IsMotherboardEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.IsCpuEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.IsGpuEnabled = $true").append(LINE_BREAK);
+		code.append("$PC.IsStorageEnabled = $true").append(LINE_BREAK);
 
 		return code.toString();
 	}

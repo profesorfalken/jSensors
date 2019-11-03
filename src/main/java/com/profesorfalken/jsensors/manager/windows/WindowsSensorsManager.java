@@ -60,7 +60,7 @@ public class WindowsSensorsManager extends SensorsManager {
         for (final String dataLine : dataLines) {
             if (!readingHardLabel && "HardwareType".equals(getKey(dataLine))) {
                 String hardwareType = getValue(dataLine);
-                if ("CPU".equals(hardwareType)) {
+                if ("Cpu".equals(hardwareType)) {
                     normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("CPU").append(LINE_BREAK);
                     readingHardLabel = true;
@@ -68,11 +68,11 @@ public class WindowsSensorsManager extends SensorsManager {
                     normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("GPU").append(LINE_BREAK);
                     readingHardLabel = true;
-                } else if ("HDD".equals(hardwareType)) {
+                } else if ("Storage".equals(hardwareType)) {
                     normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("DISK").append(LINE_BREAK);
                     readingHardLabel = true;
-                } else if ("Mainboard".equals(hardwareType)) {
+                } else if ("Motherboard".equals(hardwareType)) {
                     normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
                     normalizedSensorsData.append("MOBO").append(LINE_BREAK);
                     readingHardLabel = false;
