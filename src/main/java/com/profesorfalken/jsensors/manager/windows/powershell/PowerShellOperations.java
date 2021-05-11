@@ -20,18 +20,19 @@ import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
+
 /**
  *
  * @author Javier Garcia Alonso
  */
-public enum PowerShellOperations {
-	GET;
+public class PowerShellOperations implements Closeable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
 	private PowerShell powerShell = null;
 
-	PowerShellOperations() {
+	public PowerShellOperations() {
 		this.powerShell = PowerShell.openSession();
 	}
 
@@ -43,5 +44,10 @@ public enum PowerShellOperations {
 
 	public String getRawSensorsData() {
 		return this.powerShell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
+	}
+
+	@Override
+	public void close() {
+		powerShell.close();
 	}
 }
