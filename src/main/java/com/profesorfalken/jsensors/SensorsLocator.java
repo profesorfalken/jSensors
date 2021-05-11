@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author Javier Garcia Alonso
  */
-enum SensorsLocator {
+public enum SensorsLocator {
 	get;
 
 	Components getComponents(Map<String, String> config) {

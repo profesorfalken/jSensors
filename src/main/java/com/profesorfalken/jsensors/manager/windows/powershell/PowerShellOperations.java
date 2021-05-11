@@ -30,11 +30,8 @@ public class PowerShellOperations implements Closeable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
-	private PowerShell powerShell = null;
-
-	public PowerShellOperations() {
-		this.powerShell = PowerShell.openSession();
-	}
+	private final PowerShell powerShell = PowerShell.openSession();
+	private final String script = PowerShellScriptHelper.generateScript();
 
 	public static boolean isAdministrator() {
 		String command = "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")";
@@ -43,7 +40,7 @@ public class PowerShellOperations implements Closeable {
 	}
 
 	public String getRawSensorsData() {
-		return this.powerShell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
+		return this.powerShell.executeCommand(script).getCommandOutput();
 	}
 
 	@Override
