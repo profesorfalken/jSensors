@@ -146,19 +146,24 @@ public class UnixSensorsManager extends SensorsManager {
 			addDebugData(String.format("Feature name: %s", feature.name));
 			addDebugData(String.format("Feature label: %s", cSensors.sensors_get_label(chip, feature)));
 
+			boolean requiresValue = true;
 			if (feature.name.startsWith("temp")) {
 				addData(String.format("Temp %s:", cSensors.sensors_get_label(chip, feature)), false);
 			} else if (feature.name.startsWith("fan")) {
 				addData(String.format("Fan %s:", cSensors.sensors_get_label(chip, feature)), false);
+			} else {
+				requiresValue = false;
 			}
 
 			List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
 
-			addSubFeatures(cSensors, chip, subFeatures);
+			if (requiresValue && !addSubFeatures(cSensors, chip, subFeatures)) {
+				addData("0");
+			}
 		}
 	}
 
-	private void addSubFeatures(CSensors cSensors, CChip chip, List<CSubFeature> subFeatures) {
+	private boolean addSubFeatures(CSensors cSensors, CChip chip, List<CSubFeature> subFeatures) {
 		for (final CSubFeature subFeature : subFeatures) {
 			addDebugData(String.format("SubFeature type: %d", subFeature.type));
 			addDebugData(String.format("SubFeature name: %s", subFeature.name));
@@ -170,12 +175,13 @@ public class UnixSensorsManager extends SensorsManager {
 
 				if (subFeature.name.endsWith("_input")) {
 					addData(String.format("%s", pValue.getValue()));
-					break;
+					return true;
 				}
 			} else {
 				addData("Could not retrieve value");
 			}
 		}
+		return false;
 	}
 
 	private static List<CChip> detectedChips(CSensors cSensors) {
