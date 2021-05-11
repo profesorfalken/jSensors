@@ -27,14 +27,16 @@ import java.util.Map;
  *
  * @author Javier Garcia Alonso
  */
-enum SensorsLocator {
+public enum SensorsLocator {
 	get;
 
 	Components getComponents(Map<String, String> config) {
-		return getManager(config).getComponents();
+		try (SensorsManager sensorsManager = getManager(config)) {
+			return sensorsManager.getComponents();
+		}
 	}
 
-	private static SensorsManager getManager(Map<String, String> config) {
+	public static SensorsManager getManager(Map<String, String> config) {
 		boolean debugMode = false;
 		if ("true".equals(config.get("debugMode"))) {
 			debugMode = true;

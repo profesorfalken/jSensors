@@ -20,19 +20,24 @@ import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
+
+import static com.profesorfalken.jsensors.manager.windows.powershell.PowerShellScriptHelper.*;
+
 /**
  *
  * @author Javier Garcia Alonso
  */
-public enum PowerShellOperations {
-	GET;
+public class PowerShellOperations implements Closeable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
 	private PowerShell powerShell = null;
 
-	PowerShellOperations() {
+	public PowerShellOperations() {
 		this.powerShell = PowerShell.openSession();
+		this.powerShell.executeCommand(dllImport());
+		this.powerShell.executeCommand(newComputerInstance());
 	}
 
 	public static boolean isAdministrator() {
@@ -42,6 +47,11 @@ public enum PowerShellOperations {
 	}
 
 	public String getRawSensorsData() {
-		return this.powerShell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
+		return this.powerShell.executeCommand(sensorsQueryLoop()).getCommandOutput();
+	}
+
+	@Override
+	public void close() {
+		powerShell.close();
 	}
 }

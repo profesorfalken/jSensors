@@ -15,6 +15,7 @@
  */
 package com.profesorfalken.jsensors.manager;
 
+import java.io.Closeable;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import com.profesorfalken.jsensors.model.sensors.Temperature;
  *
  * @author Javier Garcia Alonso
  */
-public abstract class SensorsManager {
+public abstract class SensorsManager implements Closeable {
 
 	protected boolean debugMode = false;
 
@@ -130,5 +131,9 @@ public abstract class SensorsManager {
 		}
 
 		return new Sensors(temperatures, fans, loads);
+	}
+
+	@Override
+	public void close() {
 	}
 }

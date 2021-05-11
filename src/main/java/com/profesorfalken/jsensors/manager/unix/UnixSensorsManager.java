@@ -45,29 +45,17 @@ public class UnixSensorsManager extends SensorsManager {
 	private final StringBuilder sensorsData = new StringBuilder();
 	private final StringBuilder sensorsDebugData = new StringBuilder();
 
+	private final CSensors cSensors = loadDynamicLibrary();
+
+	public UnixSensorsManager() {
+		if (initCSensors(cSensors) != 0) {
+			throw new RuntimeException("Cannot initialize sensors");
+		}
+	}
+
 	@Override
 	public String getSensorsData() {
-		CSensors cSensors = loadDynamicLibrary();
-
-		if (cSensors == null) {
-			LOGGER.error("Could not load sensors dynamic library");
-			return "";
-		}
-
-		int init = initCSensors(cSensors);
-		if (init != 0) {
-			LOGGER.error("Cannot initialize sensors");
-			return "";
-		}
-
-		String normalizedData = "";
-		try {
-			normalizedData = normalizeSensorsData(cSensors);
-		} finally {
-			cSensors.sensors_cleanup();
-		}
-		
-		return normalizedData;
+		return normalizeSensorsData(cSensors);
 	}
 
 	private CSensors loadDynamicLibrary() {
@@ -158,19 +146,24 @@ public class UnixSensorsManager extends SensorsManager {
 			addDebugData(String.format("Feature name: %s", feature.name));
 			addDebugData(String.format("Feature label: %s", cSensors.sensors_get_label(chip, feature)));
 
+			boolean requiresValue = true;
 			if (feature.name.startsWith("temp")) {
 				addData(String.format("Temp %s:", cSensors.sensors_get_label(chip, feature)), false);
 			} else if (feature.name.startsWith("fan")) {
 				addData(String.format("Fan %s:", cSensors.sensors_get_label(chip, feature)), false);
+			} else {
+				requiresValue = false;
 			}
 
 			List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
 
-			addSubFeatures(cSensors, chip, subFeatures);
+			if (requiresValue && !addSubFeatures(cSensors, chip, subFeatures)) {
+				addData("0");
+			}
 		}
 	}
 
-	private void addSubFeatures(CSensors cSensors, CChip chip, List<CSubFeature> subFeatures) {
+	private boolean addSubFeatures(CSensors cSensors, CChip chip, List<CSubFeature> subFeatures) {
 		for (final CSubFeature subFeature : subFeatures) {
 			addDebugData(String.format("SubFeature type: %d", subFeature.type));
 			addDebugData(String.format("SubFeature name: %s", subFeature.name));
@@ -182,12 +175,13 @@ public class UnixSensorsManager extends SensorsManager {
 
 				if (subFeature.name.endsWith("_input")) {
 					addData(String.format("%s", pValue.getValue()));
-					break;
+					return true;
 				}
 			} else {
 				addData("Could not retrieve value");
 			}
 		}
+		return false;
 	}
 
 	private static List<CChip> detectedChips(CSensors cSensors) {
@@ -229,4 +223,8 @@ public class UnixSensorsManager extends SensorsManager {
 		return subFeatures;
 	}
 
+	@Override
+	public void close() {
+		cSensors.sensors_cleanup();
+	}
 }
