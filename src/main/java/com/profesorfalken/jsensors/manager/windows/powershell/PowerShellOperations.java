@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 
+import static com.profesorfalken.jsensors.manager.windows.powershell.PowerShellScriptHelper.*;
+
 /**
  *
  * @author Javier Garcia Alonso
@@ -30,8 +32,13 @@ public class PowerShellOperations implements Closeable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
-	private final PowerShell powerShell = PowerShell.openSession();
-	private final String script = PowerShellScriptHelper.generateScript();
+	private PowerShell powerShell = null;
+
+	public PowerShellOperations() {
+		this.powerShell = PowerShell.openSession();
+		this.powerShell.executeCommand(dllImport());
+		this.powerShell.executeCommand(newComputerInstance());
+	}
 
 	public static boolean isAdministrator() {
 		String command = "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")";
@@ -40,7 +47,7 @@ public class PowerShellOperations implements Closeable {
 	}
 
 	public String getRawSensorsData() {
-		return this.powerShell.executeCommand(script).getCommandOutput();
+		return this.powerShell.executeCommand(sensorsQueryLoop()).getCommandOutput();
 	}
 
 	@Override

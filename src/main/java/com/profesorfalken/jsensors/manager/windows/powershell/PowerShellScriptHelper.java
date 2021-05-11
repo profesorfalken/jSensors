@@ -38,13 +38,13 @@ class PowerShellScriptHelper {
 	private PowerShellScriptHelper() {
 	}
 
-	private static String dllImport() {
+	public static String dllImport() {
 		return "[System.Reflection.Assembly]::LoadFile(\""
 				+ SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll") + "\")" + " | Out-Null"
 				+ LINE_BREAK;
 	}
 
-	private static String newComputerInstance() {
+	public static String newComputerInstance() {
 		StringBuilder code = new StringBuilder();
 
 		code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
@@ -59,7 +59,7 @@ class PowerShellScriptHelper {
 		return code.toString();
 	}
 
-	private static String sensorsQueryLoop() {
+	public static String sensorsQueryLoop() {
 		StringBuilder code = new StringBuilder();
 
 		code.append("try").append(LINE_BREAK);
@@ -89,7 +89,7 @@ class PowerShellScriptHelper {
 		code.append("$sensor").append(LINE_BREAK);
 		code.append("Write-Host \"\"").append(LINE_BREAK);
 		code.append("}").append(LINE_BREAK);
-		code.append("}");
+		code.append("}").append(LINE_BREAK);
 
 		return code.toString();
 	}
