@@ -45,29 +45,17 @@ public class UnixSensorsManager extends SensorsManager {
 	private final StringBuilder sensorsData = new StringBuilder();
 	private final StringBuilder sensorsDebugData = new StringBuilder();
 
+	private final CSensors cSensors = loadDynamicLibrary();
+
+	public UnixSensorsManager() {
+		if (initCSensors(cSensors) != 0) {
+			throw new RuntimeException("Cannot initialize sensors");
+		}
+	}
+
 	@Override
 	public String getSensorsData() {
-		CSensors cSensors = loadDynamicLibrary();
-
-		if (cSensors == null) {
-			LOGGER.error("Could not load sensors dynamic library");
-			return "";
-		}
-
-		int init = initCSensors(cSensors);
-		if (init != 0) {
-			LOGGER.error("Cannot initialize sensors");
-			return "";
-		}
-
-		String normalizedData = "";
-		try {
-			normalizedData = normalizeSensorsData(cSensors);
-		} finally {
-			cSensors.sensors_cleanup();
-		}
-		
-		return normalizedData;
+		return normalizeSensorsData(cSensors);
 	}
 
 	private CSensors loadDynamicLibrary() {
@@ -229,4 +217,8 @@ public class UnixSensorsManager extends SensorsManager {
 		return subFeatures;
 	}
 
+	@Override
+	public void close() {
+		cSensors.sensors_cleanup();
+	}
 }
