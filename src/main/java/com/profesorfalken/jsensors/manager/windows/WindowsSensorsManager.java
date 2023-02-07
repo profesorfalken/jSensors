@@ -34,10 +34,12 @@ public class WindowsSensorsManager extends SensorsManager {
     
     private static final String COMPONENT_SEPARATOR = "[COMPONENT]";
 
+    private final PowerShellOperations powerShellOperations = new PowerShellOperations();
+
     @Override
     public String getSensorsData() {
 
-        String rawSensorsData = PowerShellOperations.GET.getRawSensorsData();
+        String rawSensorsData = powerShellOperations.getRawSensorsData();
 
         if (debugMode) {
             LOGGER.info("RawSensorData: " + rawSensorsData);
@@ -135,5 +137,10 @@ public class WindowsSensorsManager extends SensorsManager {
         }
 
         return "";
+    }
+
+    @Override
+    public void close() {
+        powerShellOperations.close();
     }
 }
