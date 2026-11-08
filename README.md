@@ -45,24 +45,26 @@ component type (batteries, WiFi cards, USB-C power supplies) are not reported.
 
 ## Installation ##
 
-To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.3.0
+To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/3.0.0
 
 For example, for Maven you have just to add to your pom.xml: 
 
      <dependency>
           <groupId>com.profesorfalken</groupId>
           <artifactId>jSensors</artifactId>
-          <version>2.3.0</version>
+          <version>3.0.0</version>
      </dependency>
 
 
 ## Basic Usage ##
 
+**Requirements:** Java 8 or later.
+
 ### Use as a library ###
 
 In order to retrieve sensors data, it is only necessary to call the method _components()_.
 
-It will retrieve a list of hardware components: CPUs, GPUs, Disks...
+It will retrieve a list of hardware components: CPUs, GPUs, Disks and motherboards. Any other chip that exposes sensors (batteries, network cards, USB-C power supplies...) is returned in `components.others`, so no information is lost.
 
 #### Get CPU sensors (temperature and fans) ####
 ```java
@@ -93,6 +95,8 @@ It will retrieve a list of hardware components: CPUs, GPUs, Disks...
 
 Same for other hardware components as GPU or Disks.
 
+On Windows the library keeps a PowerShell process open to read the sensors. Call `JSensors.get.close()` when your application shuts down, otherwise the process will keep the JVM alive.
+
 ### Use as a standalone application ###
 
 First of all, download the JAR file containing all dependencies: https://github.com/profesorfalken/profesorfalken.github.io/raw/master/files/jSensors-2.2-jar-with-dependencies.jar
@@ -100,7 +104,7 @@ First of all, download the JAR file containing all dependencies: https://github.
 Execute jSensors and get all sensors data: 
 
 ```
-    java -jar jsensors-2.3.0-jar-with-dependencies.jar
+    java -jar jsensors-3.0.0-jar-with-dependencies.jar
 ```
 
 This will generate a console output. 
@@ -109,7 +113,7 @@ This will generate a console output.
 It is also possible to show a simple gui with all the sensors data:
 
 ```
-    java -jar jsensors-2.3.0-jar-with-dependencies.jar --gui
+    java -jar jsensors-3.0.0-jar-with-dependencies.jar --gui
 ```
 
 Result:
