@@ -51,14 +51,19 @@ public enum JSensors {
 	}
 
 	private static void checkRights() {
-		if (OSDetector.isWindows() && !PowerShellOperations.isAdministrator()) {
-			LOGGER.warn("You have not executed jSensors in Administrator mode, so CPU temperature sensors will not be detected.");
+		try {
+			if (OSDetector.isWindows() && !PowerShellOperations.isAdministrator()) {
+				LOGGER.warn("You have not executed jSensors in Administrator mode, so CPU temperature sensors will not be detected.");
+			}
+		} catch (RuntimeException ex) {
+			// A failed check must never break the class initialisation
+			LOGGER.debug("Cannot check administrator rights", ex);
 		}
 	}
 
 	JSensors() {
 		// Load config from file
-		baseConfig = SensorsConfig.getConfigMap();
+		baseConfig = new HashMap<String, String>(SensorsConfig.getConfigMap());
 	}
 
 	/**
@@ -68,19 +73,20 @@ public enum JSensors {
 	 *            maps that contains the new config values
 	 * @return {@link JSensors} instance
 	 */
-	public JSensors config(Map<String, String> config) {
-		// Initialise config if necessary
+	public synchronized JSensors config(Map<String, String> config) {
+		// Work on a copy: overrides must not modify the defaults for later calls
 		if (this.usedConfig == null) {
-			this.usedConfig = this.baseConfig;
+			this.usedConfig = new HashMap<String, String>(this.baseConfig);
 		}
 
-		// Override values
-		for (final Map.Entry<String, String> entry : config.entrySet()) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug(String.format("Overriding config entry %s, %s by %s", entry.getKey(),
-						this.usedConfig.get(entry.getKey()), entry.getValue()));
+		if (config != null) {
+			for (final Map.Entry<String, String> entry : config.entrySet()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug(String.format("Overriding config entry %s, %s by %s", entry.getKey(),
+							this.usedConfig.get(entry.getKey()), entry.getValue()));
+				}
+				this.usedConfig.put(entry.getKey(), entry.getValue());
 			}
-			this.usedConfig.put(entry.getKey(), entry.getValue());
 		}
 
 		return this;
@@ -99,16 +105,27 @@ public enum JSensors {
 	 * @return {@link Components} object that containt the lists of components
 	 */
 	public Components components() {
-		if (this.usedConfig == null) {
-			this.usedConfig = new HashMap<String, String>();
+		Map<String, String> config;
+		synchronized (this) {
+			config = (this.usedConfig != null) ? this.usedConfig : new HashMap<String, String>(this.baseConfig);
+			// Reset config so the next call starts from the defaults again
+			this.usedConfig = null;
 		}
 
-		Components components = SensorsLocator.get.getComponents(this.usedConfig);
+		return SensorsLocator.get.getComponents(config);
+	}
 
-		// Reset config
-		this.usedConfig = this.baseConfig;
-
-		return components;
+	/**
+	 * Releases the resources held by the underlying managers.
+	 * <p>
+	 * On Windows a PowerShell session is kept open to query the sensors, and that
+	 * process prevents the JVM from terminating on its own. Call this method when the
+	 * application is shutting down.
+	 */
+	public void close() {
+		if (OSDetector.isWindows()) {
+			PowerShellOperations.GET.close();
+		}
 	}
 
 	/**
