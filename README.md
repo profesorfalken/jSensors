@@ -1,6 +1,6 @@
 ![](https://img.shields.io/maven-central/v/com.profesorfalken/jSensors.svg)
 ![](https://img.shields.io/github/license/profesorfalken/jSensors.svg)
-![](https://travis-ci.org/profesorfalken/jSensors.svg)
+[![CI](https://github.com/profesorfalken/jSensors/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/profesorfalken/jSensors/actions/workflows/ci.yml)
 
 # jSensors
 Monitorize all the hardware sensors of your PC using Java
@@ -25,30 +25,34 @@ Monitorize all the hardware sensors of your PC using Java
 #### Linux Example Output ####
 
     Scanning sensors data...
-    Found CPU component ISA adapter
+    Found CPU component: coretemp
     Sensors: 
-    Temp Core 0: 75.0 C
-    Temp Core 2: 76.0 C
-    Found GPU component PCI adapter
+    Temp Package id 0: 76.0 C
+    Temp Core 0: 74.0 C
+    Temp Core 1: 62.0 C
+    Temp Core 2: 72.0 C
+    Temp Core 3: 63.0 C
+    Found disk component: nvme
     Sensors: 
-    Temp temp1: 62.0 C
-    Found disk component Virtual device
-    Sensors: 
-    Temp temp1: 67.0 C
-    Temp temp2: 67.0 C
+    Temp Composite: 31.85 C
+    Temp Sensor 1: 31.85 C
+
+Components are named after the sensor chip they come from (`coretemp`, `nvme`, `acpitz`,
+`it8728`...), which is what identifies them. Chips that do not map to a supported
+component type (batteries, WiFi cards, USB-C power supplies) are not reported.
 
 **IMPORTANT NOTE:** if you are getting 0.0 as temperature value, try to launch as Administrator
 
 ## Installation ##
 
-To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.2.1
+To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/2.3.0
 
 For example, for Maven you have just to add to your pom.xml: 
 
      <dependency>
           <groupId>com.profesorfalken</groupId>
           <artifactId>jSensors</artifactId>
-          <version>2.2.1</version>
+          <version>2.3.0</version>
      </dependency>
 
 
@@ -96,7 +100,7 @@ First of all, download the JAR file containing all dependencies: https://github.
 Execute jSensors and get all sensors data: 
 
 ```
-    java -jar jsensors-2.2.1-jar-with-dependencies.jar
+    java -jar jsensors-2.3.0-jar-with-dependencies.jar
 ```
 
 This will generate a console output. 
@@ -105,7 +109,7 @@ This will generate a console output.
 It is also possible to show a simple gui with all the sensors data:
 
 ```
-    java -jar jsensors-2.2.1-jar-with-dependencies.jar --gui
+    java -jar jsensors-2.3.0-jar-with-dependencies.jar --gui
 ```
 
 Result:
