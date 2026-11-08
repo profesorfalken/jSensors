@@ -27,6 +27,7 @@ import com.sun.jna.ptr.IntByReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,11 +43,17 @@ public class UnixSensorsManager extends SensorsManager {
 
 	private static final String LINE_BREAK = "\n";
 
+	private static final String COMPONENT_SEPARATOR = "[COMPONENT]";
+
 	private final StringBuilder sensorsData = new StringBuilder();
 	private final StringBuilder sensorsDebugData = new StringBuilder();
 
 	@Override
 	public String getSensorsData() {
+		// The manager can be reused: never accumulate data from previous calls
+		sensorsData.setLength(0);
+		sensorsDebugData.setLength(0);
+
 		CSensors cSensors = loadDynamicLibrary();
 
 		if (cSensors == null) {
@@ -66,7 +73,7 @@ public class UnixSensorsManager extends SensorsManager {
 		} finally {
 			cSensors.sensors_cleanup();
 		}
-		
+
 		return normalizedData;
 	}
 
@@ -79,6 +86,9 @@ public class UnixSensorsManager extends SensorsManager {
 			LOGGER.info("Cannot find library in system, using embedded one");
 			try {
 				String libPath = SensorsUtils.generateLibTmpPath("/lib/linux/", "libsensors.so.4.4.0");
+				if (libPath.isEmpty()) {
+					return null;
+				}
 				jnaProxy = Native.loadLibrary(libPath, CSensors.class);
 				new File(libPath).delete();
 			} catch (UnsatisfiedLinkError err1) {
@@ -95,13 +105,8 @@ public class UnixSensorsManager extends SensorsManager {
 	}
 
 	private void addData(String data) {
-		addData(data, true);
-	}
-
-	private void addData(String data, boolean newLine) {
-		String endLine = newLine ? LINE_BREAK : "";
-		sensorsData.append(data).append(endLine);
-		sensorsDebugData.append(data).append(endLine);
+		sensorsData.append(data).append(LINE_BREAK);
+		sensorsDebugData.append(data).append(LINE_BREAK);
 	}
 
 	private void addDebugData(String debugData) {
@@ -113,32 +118,23 @@ public class UnixSensorsManager extends SensorsManager {
 		List<CChip> chips = detectedChips(cSensors);
 
 		for (final CChip chip : chips) {
-			addData("[COMPONENT]");
-
-			addDebugData(String.format("Type: %d", chip.bus.type));
-			addDebugData(String.format("Address: %d", chip.addr));
-			addDebugData(String.format("Path: %s", chip.path));
-			addDebugData(String.format("Prefix: %s", chip.prefix));
-
-			if (chip.bus != null) {
-				switch (chip.bus.type) {
-				case 1:
-					addData("CPU");
-					break;
-				case 2:
-					addData("GPU");
-					break;
-				case 4:
-				case 5:
-					addData("DISK");
-					break;
-				default:
-					addData("UNKNOWN");
-				}
-
+			String componentType = classifyComponent(chip);
+			if (componentType == null) {
+				// Chips that do not map to a supported component are not reported
+				addDebugData(String.format("Ignored chip: %s (bus type %s)", chipName(chip),
+						chip.bus == null ? -1 : chip.bus.type));
+				continue;
 			}
 
-			addData(String.format("Label: %s", cSensors.sensors_get_adapter_name(chip.bus)));
+			addData(COMPONENT_SEPARATOR);
+			addData(componentType);
+
+			addDebugData(String.format("Type: %s", componentType));
+			addDebugData(String.format("Address: %d", chip.addr));
+			addDebugData(String.format("Path: %s", chip.path));
+			addDebugData(String.format("Chip: %s", chip.prefix));
+
+			addData(String.format("Label: %s", chipName(chip)));
 
 			List<CFeature> features = features(cSensors, chip);
 
@@ -152,42 +148,114 @@ public class UnixSensorsManager extends SensorsManager {
 		return sensorsData.toString();
 	}
 
+	/**
+	 * Returns the component type for a chip, or null when the chip does not map to a
+	 * supported component.
+	 * <p>
+	 * The bus type alone is not enough on modern hardware: an NVMe drive enumerates as a
+	 * PCI device and used to be reported as a GPU, while ACPI thermal zones, batteries and
+	 * WiFi chips enumerate on the ISA bus and used to be reported as CPUs. The chip name is
+	 * the reliable signal, so only names that are actually understood are reported; chips
+	 * that do not fit the model (battery, WiFi, USB-C power supply...) are skipped instead
+	 * of being filed under an invented category.
+	 *
+	 * @param chip detected chip
+	 * @return CPU, GPU, DISK, MOBO or null
+	 */
+	static String classifyComponent(CChip chip) {
+		String name = chipName(chip).toLowerCase(Locale.ROOT);
+
+		if (startsWithAny(name, "coretemp", "k10temp", "zenpower", "cpu_thermal", "soc_thermal", "cpu")) {
+			return "CPU";
+		}
+		if (startsWithAny(name, "nvme", "drivetemp", "sd", "hd", "ata", "mmcblk")) {
+			return "DISK";
+		}
+		if (startsWithAny(name, "amdgpu", "radeon", "nouveau", "nvidia", "i915", "gpu")) {
+			return "GPU";
+		}
+		if (startsWithAny(name, "it87", "nct", "f7", "w83", "asus", "gigabyte", "dell_smm",
+				"pch_", "acpitz", "thinkpad", "applesmc")) {
+			return "MOBO";
+		}
+
+		return null;
+	}
+
+	private static boolean startsWithAny(String name, String... prefixes) {
+		for (String prefix : prefixes) {
+			if (name.startsWith(prefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Name of the chip, which is what actually identifies a component: coretemp-isa-0000,
+	 * nvme-pci-0100, amdgpu-pci-0100...
+	 *
+	 * @param chip detected chip
+	 * @return chip name, falling back to the adapter name and finally to a generic label
+	 */
+	private static String chipName(CChip chip) {
+		if (chip.prefix != null && !chip.prefix.trim().isEmpty()) {
+			return chip.prefix.trim();
+		}
+		return "unknown";
+	}
+
 	private void addFeatures(CSensors cSensors, CChip chip, List<CFeature> features) {
 		for (final CFeature feature : features) {
 			addDebugData(String.format("Feature type: %d", feature.type));
 			addDebugData(String.format("Feature name: %s", feature.name));
-			addDebugData(String.format("Feature label: %s", cSensors.sensors_get_label(chip, feature)));
 
+			String kind;
 			if (feature.name.startsWith("temp")) {
-				addData(String.format("Temp %s:", cSensors.sensors_get_label(chip, feature)), false);
+				kind = "Temp";
 			} else if (feature.name.startsWith("fan")) {
-				addData(String.format("Fan %s:", cSensors.sensors_get_label(chip, feature)), false);
+				kind = "Fan";
+			} else {
+				continue;
 			}
 
-			List<CSubFeature> subFeatures = subFeatures(cSensors, chip, feature);
+			String label = cSensors.sensors_get_label(chip, feature);
+			String sensorName = (label == null || label.trim().isEmpty()) ? feature.name : label.trim();
 
-			addSubFeatures(cSensors, chip, subFeatures);
+			Double value = readFeatureValue(cSensors, chip, feature);
+			if (value == null) {
+				addDebugData(String.format("No value for %s", sensorName));
+				continue;
+			}
+
+			addData(String.format("%s %s: %s", kind, sensorName, value));
 		}
 	}
 
-	private void addSubFeatures(CSensors cSensors, CChip chip, List<CSubFeature> subFeatures) {
-		for (final CSubFeature subFeature : subFeatures) {
-			addDebugData(String.format("SubFeature type: %d", subFeature.type));
-			addDebugData(String.format("SubFeature name: %s", subFeature.name));
-
-			double value = 0.0;
-			DoubleByReference pValue = new DoubleByReference(value);
-			if (cSensors.sensors_get_value(chip, subFeature.number, pValue) == 0) {
-				addDebugData(String.format("SubFeature value: %s", pValue.getValue()));
-
-				if (subFeature.name.endsWith("_input")) {
-					addData(String.format("%s", pValue.getValue()));
-					break;
-				}
-			} else {
-				addData("Could not retrieve value");
+	/**
+	 * Reads the value of a feature. Only a successful read produces a value: a failed
+	 * read used to be written as the text "Could not retrieve value" into the numeric
+	 * field, which then broke the parser.
+	 *
+	 * @param cSensors sensors library
+	 * @param chip     chip the feature belongs to
+	 * @param feature  feature to read
+	 * @return the value, or null when it cannot be read
+	 */
+	private Double readFeatureValue(CSensors cSensors, CChip chip, CFeature feature) {
+		for (final CSubFeature subFeature : subFeatures(cSensors, chip, feature)) {
+			if (subFeature.name == null || !subFeature.name.endsWith("_input")) {
+				continue;
 			}
+			DoubleByReference value = new DoubleByReference(0.0);
+			if (cSensors.sensors_get_value(chip, subFeature.number, value) == 0) {
+				addDebugData(String.format("SubFeature value: %s", value.getValue()));
+				return value.getValue();
+			}
+			addDebugData(String.format("Cannot read subfeature %s", subFeature.name));
+			return null;
 		}
+		return null;
 	}
 
 	private static List<CChip> detectedChips(CSensors cSensors) {
@@ -218,6 +286,7 @@ public class UnixSensorsManager extends SensorsManager {
 
 	private static List<CSubFeature> subFeatures(CSensors cSensors, CChip chip, CFeature feature) {
 		List<CSubFeature> subFeatures = new ArrayList<CSubFeature>();
+
 		CSubFeature foundSubFeature;
 		int numSubFeature = 0;
 		while ((foundSubFeature = cSensors.sensors_get_all_subfeatures(chip, feature,
