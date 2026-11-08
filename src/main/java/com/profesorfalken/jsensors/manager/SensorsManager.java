@@ -15,23 +15,24 @@
  */
 package com.profesorfalken.jsensors.manager;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import com.profesorfalken.jsensors.model.components.*;
 import com.profesorfalken.jsensors.model.sensors.Fan;
 import com.profesorfalken.jsensors.model.sensors.Load;
 import com.profesorfalken.jsensors.model.sensors.Sensors;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Javier Garcia Alonso
  */
 public abstract class SensorsManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SensorsManager.class);
 
 	protected boolean debugMode = false;
 
@@ -84,51 +85,96 @@ public abstract class SensorsManager {
 	}
 
 	private static String getName(String componentData) {
-		String name = null;
-
 		String[] dataLines = componentData.split("\\r?\\n");
 		for (final String dataLine : dataLines) {
 			if (dataLine.startsWith("Label")) {
-				name = dataLine.split(":")[1].trim();
-				break;
+				String[] data = dataLine.split(":", 2);
+				if (data.length > 1) {
+					return data[1].trim();
+				}
 			}
 		}
 
-		return name;
+		return null;
 	}
 
 	private Sensors getSensors(String componentData) {
 		List<Temperature> temperatures = new ArrayList<Temperature>();
 		List<Fan> fans = new ArrayList<Fan>();
 		List<Load> loads = new ArrayList<Load>();
-		NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 
 		String[] dataLines = componentData.split("\\r?\\n");
 
 		for (final String dataLine : dataLines) {
-			try {
-				if (dataLine.startsWith("Temp")) {
-					String[] data = dataLine.split(":");
+			String kind;
+			if (dataLine.startsWith("Temp")) {
+				kind = "temperature";
+			} else if (dataLine.startsWith("Fan")) {
+				kind = "fan";
+			} else if (dataLine.startsWith("Load")) {
+				kind = "load";
+			} else {
+				continue;
+			}
 
-					Temperature temperature = new Temperature(data[0].trim(),
-							data[1].trim().length() > 0 ? nf.parse(data[1].trim()).doubleValue() : 0.0);
-					temperatures.add(temperature);
-				} else if (dataLine.startsWith("Fan")) {
-					String[] data = dataLine.split(":");
-					Fan fan = new Fan(data[0].trim(),
-							data[1].trim().length() > 0 ? nf.parse(data[1].trim()).doubleValue() : 0.0);
-					fans.add(fan);
-				} else if (dataLine.startsWith("Load")) {
-					String[] data = dataLine.split(":");
-					Load load = new Load(data[0].trim(),
-							data[1].trim().length() > 0 ? nf.parse(data[1].trim()).doubleValue() : 0.0);
-					loads.add(load);
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
+			String[] data = dataLine.split(":", 2);
+			if (data.length < 2) {
+				continue;
+			}
+
+			String sensorName = data[0].trim();
+			String rawValue = data[1].trim();
+
+			if (rawValue.isEmpty()) {
+				continue;
+			}
+
+			double value;
+			try {
+				value = parseValue(rawValue);
+			} catch (NumberFormatException nfe) {
+				// A sensor that cannot be parsed is skipped instead of printing a stack trace
+				LOGGER.warn("Cannot parse {} value '{}'", kind, rawValue);
+				continue;
+			}
+
+			if ("temperature".equals(kind)) {
+				temperatures.add(new Temperature(sensorName, value));
+			} else if ("fan".equals(kind)) {
+				fans.add(new Fan(sensorName, value));
+			} else {
+				loads.add(new Load(sensorName, value));
 			}
 		}
 
 		return new Sensors(temperatures, fans, loads);
+	}
+
+	/**
+	 * Parses a sensor value produced by any backend.
+	 * <p>
+	 * The previous implementation used {@code NumberFormat.getInstance(Locale.getDefault())},
+	 * so the result depended on the machine locale: in Spanish or German, "80.0" was parsed
+	 * as 800 and "30.85" as 3085, because the dot is the grouping separator there. Sensor
+	 * values are always written with a dot, but a comma may appear when PowerShell formats
+	 * a number with a decimal-comma culture, so both are accepted.
+	 *
+	 * @param rawValue value as written by the backend
+	 * @return numeric value
+	 * @throws NumberFormatException when the value contains no number
+	 */
+	static double parseValue(String rawValue) {
+		String value = rawValue.trim().replace(',', '.');
+
+		try {
+			return Double.parseDouble(value);
+		} catch (NumberFormatException firstAttempt) {
+			// Units or extra text around the number, e.g. "33.85 C"
+			String digits = value.replaceAll("[^0-9.\\-]", "");
+			if (digits.isEmpty()) {
+				throw firstAttempt;
+			}
+			return Double.parseDouble(digits);
+		}
 	}
 }
