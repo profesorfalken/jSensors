@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,7 @@
  */
 package com.profesorfalken.jsensors.model.components;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,10 +28,21 @@ public class Components {
 	public final List<Disk> disks;
 	public final List<Mobo> mobos;
 
+	/**
+	 * Components with sensors that do not fit the CPU, GPU, disk or motherboard
+	 * categories: batteries, network cards, memory modules...
+	 */
+	public final List<Other> others;
+
 	public Components(List<Cpu> cpus, List<Gpu> gpus, List<Disk> disks, List<Mobo> mobos) {
+		this(cpus, gpus, disks, mobos, Collections.<Other>emptyList());
+	}
+
+	public Components(List<Cpu> cpus, List<Gpu> gpus, List<Disk> disks, List<Mobo> mobos, List<Other> others) {
 		this.cpus = cpus;
 		this.gpus = gpus;
 		this.disks = disks;
 		this.mobos = mobos;
+		this.others = others;
 	}
 }

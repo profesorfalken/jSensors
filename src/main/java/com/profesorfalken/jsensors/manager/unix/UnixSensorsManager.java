@@ -120,10 +120,11 @@ public class UnixSensorsManager extends SensorsManager {
 		for (final CChip chip : chips) {
 			String componentType = classifyComponent(chip);
 			if (componentType == null) {
-				// Chips that do not map to a supported component are not reported
-				addDebugData(String.format("Ignored chip: %s (bus type %s)", chipName(chip),
+				// Unknown chips are reported instead of dropped: losing a sensor is worse
+				// than filing it under "other"
+				componentType = "OTHER";
+				addDebugData(String.format("Unclassified chip: %s (bus type %s)", chipName(chip),
 						chip.bus == null ? -1 : chip.bus.type));
-				continue;
 			}
 
 			addData(COMPONENT_SEPARATOR);

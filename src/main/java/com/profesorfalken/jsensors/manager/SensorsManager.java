@@ -48,6 +48,7 @@ public abstract class SensorsManager {
 		List<Gpu> gpus = new ArrayList<Gpu>();
 		List<Disk> disks = new ArrayList<Disk>();
 		List<Mobo> mobos = new ArrayList<Mobo>();
+		List<Other> others = new ArrayList<Other>();
 
 		String normalizedSensorsData = getSensorsData();
 
@@ -62,10 +63,12 @@ public abstract class SensorsManager {
 				disks.add(getDisk(componentData));
 			} else if (componentData.startsWith("MOBO")) {
 				mobos.add(getMobo(componentData));
+			} else if (componentData.startsWith("OTHER")) {
+				others.add(getOther(componentData));
 			}
 		}
 
-		return new Components(cpus, gpus, disks, mobos);
+		return new Components(cpus, gpus, disks, mobos, others);
 	}
 
 	private Cpu getCpu(String cpuData) {
@@ -82,6 +85,10 @@ public abstract class SensorsManager {
 
 	private Mobo getMobo(String moboData) {
 		return new Mobo(getName(moboData), getSensors(moboData));
+	}
+
+	private Other getOther(String otherData) {
+		return new Other(getName(otherData), getSensors(otherData));
 	}
 
 	private static String getName(String componentData) {

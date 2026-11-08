@@ -24,6 +24,8 @@ import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.model.components.Cpu;
 import com.profesorfalken.jsensors.model.components.Disk;
 import com.profesorfalken.jsensors.model.components.Gpu;
+import com.profesorfalken.jsensors.model.components.Mobo;
+import com.profesorfalken.jsensors.model.components.Other;
 import com.profesorfalken.jsensors.model.sensors.Fan;
 import com.profesorfalken.jsensors.model.sensors.Load;
 import com.profesorfalken.jsensors.model.sensors.Temperature;
@@ -61,6 +63,22 @@ public class ConsoleOutput {
 			for (final Disk disk : disks) {
 				System.out.println("Found disk component: " + disk.name);
 				readComponent(disk);
+			}
+		}
+
+		List<Mobo> mobos = components.mobos;
+		if (mobos != null) {
+			for (final Mobo mobo : mobos) {
+				System.out.println("Found motherboard component: " + mobo.name);
+				readComponent(mobo);
+			}
+		}
+
+		List<Other> others = components.others;
+		if (others != null) {
+			for (final Other other : others) {
+				System.out.println("Found other component: " + other.name);
+				readComponent(other);
 			}
 		}
 	}

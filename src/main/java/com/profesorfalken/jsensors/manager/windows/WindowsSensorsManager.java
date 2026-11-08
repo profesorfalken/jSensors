@@ -17,6 +17,7 @@ package com.profesorfalken.jsensors.manager.windows;
 
 import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
+import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,22 +61,12 @@ public class WindowsSensorsManager extends SensorsManager {
         for (final String dataLine : dataLines) {
             if (!readingHardLabel && "HardwareType".equals(getKey(dataLine))) {
                 String hardwareType = getValue(dataLine);
-                if ("CPU".equals(hardwareType)) {
+                String componentType = componentType(hardwareType);
+                if (componentType != null) {
                     normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
-                    normalizedSensorsData.append("CPU").append(LINE_BREAK);
-                    readingHardLabel = true;
-                } else if (hardwareType.toUpperCase().startsWith("GPU")) {
-                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
-                    normalizedSensorsData.append("GPU").append(LINE_BREAK);
-                    readingHardLabel = true;
-                } else if ("HDD".equals(hardwareType)) {
-                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
-                    normalizedSensorsData.append("DISK").append(LINE_BREAK);
-                    readingHardLabel = true;
-                } else if ("Mainboard".equals(hardwareType)) {
-                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
-                    normalizedSensorsData.append("MOBO").append(LINE_BREAK);
-                    readingHardLabel = false;
+                    normalizedSensorsData.append(componentType).append(LINE_BREAK);
+                    // A motherboard has no Name line, so it must not wait for one
+                    readingHardLabel = !"MOBO".equals(componentType);
                 }
                 continue;
             }
@@ -119,6 +110,44 @@ public class WindowsSensorsManager extends SensorsManager {
             }
         }
         return false;
+    }
+
+    /**
+     * Maps an OpenHardwareMonitor {@code HardwareType} to a component type.
+     * <p>
+     * The comparison is case insensitive and accepts the aliases found across
+     * OpenHardwareMonitor versions: the enum says {@code Storage} and
+     * {@code Motherboard}, but older releases used {@code Hdd} and {@code Mainboard}, and
+     * the previous code compared against {@code "HDD"} and {@code "Mainboard"} with
+     * {@code equals}, so disks and motherboards were never reported on Windows.
+     * <p>
+     * Types that do not fit the model (memory, network, battery...) are reported as
+     * {@code OTHER} instead of being dropped.
+     *
+     * @param hardwareType value of the HardwareType property
+     * @return CPU, GPU, DISK, MOBO, OTHER or null when there is no type
+     */
+    static String componentType(String hardwareType) {
+        if (hardwareType == null || hardwareType.trim().isEmpty()) {
+            return null;
+        }
+
+        String type = hardwareType.trim();
+
+        if ("Cpu".equalsIgnoreCase(type)) {
+            return "CPU";
+        }
+        if (type.toUpperCase(Locale.ROOT).startsWith("GPU")) {
+            return "GPU";
+        }
+        if ("Storage".equalsIgnoreCase(type) || "Hdd".equalsIgnoreCase(type)) {
+            return "DISK";
+        }
+        if ("Motherboard".equalsIgnoreCase(type) || "Mainboard".equalsIgnoreCase(type)) {
+            return "MOBO";
+        }
+
+        return "OTHER";
     }
 
     private static String getKey(String line) {

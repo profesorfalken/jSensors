@@ -76,6 +76,23 @@ public class JSensorsConfigTest {
 		Assert.assertFalse("The stub configuration leaked to the next call", stillStubbed);
 	}
 
+	/**
+	 * Components that do not fit the CPU/GPU/disk/motherboard categories are reported in
+	 * the others list instead of being dropped.
+	 */
+	@Test
+	public void testUnknownComponentsAreKept() {
+		Map<String, String> config = new HashMap<String, String>();
+		config.put("testMode", "STUB");
+		config.put("stubContent", "[COMPONENT]\nOTHER\nLabel: BAT0\nTemp temp1: 31.0\n");
+
+		Components components = JSensors.get.config(config).components();
+
+		Assert.assertEquals(1, components.others.size());
+		Assert.assertEquals("BAT0", components.others.get(0).name);
+		Assert.assertEquals(31.0, components.others.get(0).sensors.temperatures.get(0).value, 0.0001);
+	}
+
 	private static Map<String, String> stubConfig() {
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("testMode", "STUB");
