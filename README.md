@@ -1,6 +1,8 @@
 ![](https://img.shields.io/maven-central/v/com.profesorfalken/jSensors.svg)
-![](https://img.shields.io/github/license/profesorfalken/jSensors.svg)
 [![CI](https://github.com/profesorfalken/jSensors/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/profesorfalken/jSensors/actions/workflows/ci.yml)
+[![Javadoc](https://javadoc.io/badge2/com.profesorfalken/jSensors/javadoc.svg)](https://javadoc.io/doc/com.profesorfalken/jSensors)
+![](https://img.shields.io/badge/Java-8%2B-orange)
+![](https://img.shields.io/github/license/profesorfalken/jSensors.svg)
 
 # jSensors
 Monitorize all the hardware sensors of your PC using Java
