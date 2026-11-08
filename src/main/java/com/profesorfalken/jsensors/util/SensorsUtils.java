@@ -15,11 +15,12 @@
  */
 package com.profesorfalken.jsensors.util;
 
-import com.profesorfalken.jsensors.manager.windows.powershell.PowerShellOperations;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +28,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Javier Garcia Alonso
  */
-public class SensorsUtils {
-	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
+public final class SensorsUtils {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SensorsUtils.class);
 
-	private static File tempFile = null;
+	/**
+	 * Extracted libraries, keyed by their resource path. A single static field used to be
+	 * shared by every library, so asking for a second one returned the first one again.
+	 */
+	private static final Map<String, File> extractedLibraries = new HashMap<String, File>();
 
 	// Hides constructor
 	private SensorsUtils() {
@@ -41,26 +46,52 @@ public class SensorsUtils {
 		return generateLibTmpPath("/", libName);
 	}
 
-	public static String generateLibTmpPath(String path, String libName) {
-	    if (tempFile == null) {
-            InputStream in = SensorsUtils.class.getResourceAsStream(path + libName);
-            try {
-                tempFile = File.createTempFile(libName, "");
-                tempFile.deleteOnExit();
-                byte[] buffer = new byte[1024];
-                int read;
-                FileOutputStream fos = new FileOutputStream(tempFile);
-                while ((read = in.read(buffer)) != -1) {
-                    fos.write(buffer, 0, read);
-                }
-                fos.close();
-                in.close();
-            } catch (IOException ex) {
-                LOGGER.error("Cannot generate temporary file", ex);
-                return "";
-            }
-        }
+	public static synchronized String generateLibTmpPath(String path, String libName) {
+		String resource = path + libName;
 
-		return tempFile.getAbsolutePath();
+		File cached = extractedLibraries.get(resource);
+		if (cached != null && cached.exists()) {
+			return cached.getAbsolutePath();
+		}
+
+		InputStream in = SensorsUtils.class.getResourceAsStream(resource);
+		if (in == null) {
+			// Missing resource: report it instead of failing later with a NullPointerException
+			LOGGER.error("Cannot find embedded library {}", resource);
+			return "";
+		}
+
+		File tempFile = null;
+		FileOutputStream fos = null;
+		try {
+			tempFile = File.createTempFile(libName, "");
+			tempFile.deleteOnExit();
+
+			byte[] buffer = new byte[1024];
+			int read;
+			fos = new FileOutputStream(tempFile);
+			while ((read = in.read(buffer)) != -1) {
+				fos.write(buffer, 0, read);
+			}
+
+			extractedLibraries.put(resource, tempFile);
+			return tempFile.getAbsolutePath();
+		} catch (IOException ex) {
+			LOGGER.error("Cannot generate temporary file for " + resource, ex);
+			return "";
+		} finally {
+			closeQuietly(fos);
+			closeQuietly(in);
+		}
+	}
+
+	private static void closeQuietly(java.io.Closeable closeable) {
+		if (closeable != null) {
+			try {
+				closeable.close();
+			} catch (IOException ex) {
+				LOGGER.warn("Cannot close stream", ex);
+			}
+		}
 	}
 }

@@ -16,7 +16,7 @@
 package com.profesorfalken.jsensors.manager.windows.powershell;
 
 import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellNotAvailableException;
+import com.profesorfalken.jpowershell.PowerShellResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,19 +29,54 @@ public enum PowerShellOperations {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PowerShellOperations.class);
 
+	private static final String IS_ADMIN_COMMAND = "([Security.Principal.WindowsPrincipal] "
+			+ "[Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("
+			+ "[Security.Principal.WindowsBuiltInRole] \"Administrator\")";
+
 	private PowerShell powerShell = null;
 
-	PowerShellOperations() {
-		this.powerShell = PowerShell.openSession();
+	/**
+	 * Returns the PowerShell session used to query the sensors, creating it on first use.
+	 * <p>
+	 * The session used to be created in the enum constructor, so merely loading this class
+	 * started a PowerShell process.
+	 *
+	 * @return open session
+	 */
+	private synchronized PowerShell session() {
+		if (this.powerShell == null) {
+			this.powerShell = PowerShell.openSession();
+		}
+		return this.powerShell;
 	}
 
 	public static boolean isAdministrator() {
-		String command = "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")";
-
-		return "true".equalsIgnoreCase(PowerShell.executeSingleCommand(command).getCommandOutput());
+		try {
+			PowerShellResponse response = PowerShell.executeSingleCommand(IS_ADMIN_COMMAND);
+			// executeSingleCommand returns null when PowerShell is not available
+			return response != null && "true".equalsIgnoreCase(response.getCommandOutput().trim());
+		} catch (RuntimeException ex) {
+			LOGGER.warn("Cannot check if the process is running as administrator", ex);
+			return false;
+		}
 	}
 
 	public String getRawSensorsData() {
-		return this.powerShell.executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
+		return session().executeScript(PowerShellScriptHelper.generateScript()).getCommandOutput();
+	}
+
+	/**
+	 * Closes the session and the PowerShell process behind it.
+	 */
+	public synchronized void close() {
+		if (this.powerShell != null) {
+			try {
+				this.powerShell.close();
+			} catch (RuntimeException ex) {
+				LOGGER.warn("Cannot close the PowerShell session", ex);
+			} finally {
+				this.powerShell = null;
+			}
+		}
 	}
 }
