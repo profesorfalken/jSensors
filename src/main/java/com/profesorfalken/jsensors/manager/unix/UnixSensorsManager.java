@@ -21,6 +21,7 @@ import com.profesorfalken.jsensors.manager.unix.jna.CFeature;
 import com.profesorfalken.jsensors.manager.unix.jna.CSensors;
 import com.profesorfalken.jsensors.manager.SensorsManager;
 import com.profesorfalken.jsensors.util.SensorsUtils;
+import com.profesorfalken.jsensors.util.SystemLoad;
 import com.sun.jna.Native;
 import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
@@ -116,6 +117,7 @@ public class UnixSensorsManager extends SensorsManager {
 	private String normalizeSensorsData(CSensors cSensors) {
 
 		List<CChip> chips = detectedChips(cSensors);
+		boolean loadReported = false;
 
 		for (final CChip chip : chips) {
 			String componentType = classifyComponent(chip);
@@ -140,6 +142,16 @@ public class UnixSensorsManager extends SensorsManager {
 			List<CFeature> features = features(cSensors, chip);
 
 			addFeatures(cSensors, chip, features);
+
+			// lm-sensors provides temperature and fan speed, but no CPU load: the JMX bean
+			// covers that gap (see issue #32)
+			if (!loadReported && "CPU".equals(componentType)) {
+				double load = SystemLoad.cpuLoad();
+				if (load >= 0) {
+					addData(String.format(Locale.ROOT, "Load CPU Total: %.1f", load));
+					loadReported = true;
+				}
+			}
 		}
 
 		if (debugMode) {
