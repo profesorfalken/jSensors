@@ -34,11 +34,43 @@ public final class SystemLoad {
 	}
 
 	/**
+	 * Time to wait before taking a second sample. The first sample only establishes the
+	 * reference point, so it always reports 0 and would show an idle CPU on the first call.
+	 */
+	private static final int PRIMING_MILLISECONDS = 120;
+
+	private static boolean primed = false;
+
+	/**
 	 * Returns the system CPU load as a percentage.
+	 * <p>
+	 * The first call primes the sample: the operating system needs a reference point to
+	 * compute the load, so without it the first reading is always 0. It costs
+	 * {@value #PRIMING_MILLISECONDS} ms once per JVM; later calls use the interval since
+	 * the previous one.
 	 *
 	 * @return load between 0 and 100, or -1 when the platform does not report it
 	 */
-	public static double cpuLoad() {
+	public static synchronized double cpuLoad() {
+		double load = readLoad();
+
+		if (!primed) {
+			primed = true;
+			if (load <= 0) {
+				try {
+					Thread.sleep(PRIMING_MILLISECONDS);
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+					return load;
+				}
+				load = readLoad();
+			}
+		}
+
+		return load;
+	}
+
+	private static double readLoad() {
 		try {
 			java.lang.management.OperatingSystemMXBean bean = ManagementFactory.getOperatingSystemMXBean();
 			if (bean instanceof OperatingSystemMXBean) {
