@@ -43,11 +43,23 @@ final class SensorsConfig {
 	private static Properties getConfig() {
 		if (config == null) {
 			config = new Properties();
+			java.io.InputStream properties = SensorsConfig.class.getClassLoader()
+					.getResourceAsStream(CONFIG_FILENAME);
+			if (properties == null) {
+				// A missing file must not break the class: the defaults apply instead
+				LOGGER.warn("Configuration file {} not found, using default values", CONFIG_FILENAME);
+				return config;
+			}
 			try {
-				// load a properties file from class path, inside static method
-				config.load(SensorsConfig.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
+				config.load(properties);
 			} catch (IOException ex) {
 				LOGGER.error("Cannot load config file " + CONFIG_FILENAME, ex);
+			} finally {
+				try {
+					properties.close();
+				} catch (IOException ex) {
+					LOGGER.warn("Cannot close config file " + CONFIG_FILENAME, ex);
+				}
 			}
 		}
 
