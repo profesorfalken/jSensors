@@ -49,12 +49,14 @@ class PowerShellScriptHelper {
 
 		code.append("$PC = New-Object OpenHardwareMonitor.Hardware.Computer").append(LINE_BREAK);
 
-		code.append("$PC.MainboardEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.CPUEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.RAMEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.GPUEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.FanControllerEnabled = $true").append(LINE_BREAK);
-		code.append("$PC.HDDEnabled = $true").append(LINE_BREAK);
+		// Properties are enabled only when they exist: OpenHardwareMonitor renamed some of
+		// them across versions and assigning a missing one aborts the whole script, which
+		// would look like "no sensors" instead of an error
+		code.append("$enabled = @('MainboardEnabled','CPUEnabled','RAMEnabled','GPUEnabled',")
+				.append("'FanControllerEnabled','HDDEnabled')").append(LINE_BREAK);
+		code.append("foreach ($prop in $enabled) {").append(LINE_BREAK);
+		code.append("  if ($PC.PSObject.Properties[$prop]) { $PC.$prop = $true }").append(LINE_BREAK);
+		code.append("}").append(LINE_BREAK);
 
 		return code.toString();
 	}
