@@ -47,14 +47,14 @@ component type (batteries, WiFi cards, USB-C power supplies) are not reported.
 
 ## Installation ##
 
-To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/3.0.0
+To install jSensors you can add the dependecy to your software project management tool: http://mvnrepository.com/artifact/com.profesorfalken/jSensors/3.1.0
 
 For example, for Maven you have just to add to your pom.xml: 
 
      <dependency>
           <groupId>com.profesorfalken</groupId>
           <artifactId>jSensors</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
      </dependency>
 
 
@@ -101,7 +101,7 @@ On Windows the library keeps a PowerShell process open to read the sensors. Call
 
 ### Use as a standalone application ###
 
-First of all, download the JAR file containing all dependencies: https://repo1.maven.org/maven2/com/profesorfalken/jSensors/3.0.0/jSensors-3.0.0-jar-with-dependencies.jar
+First of all, download the JAR file containing all dependencies: https://repo1.maven.org/maven2/com/profesorfalken/jSensors/3.1.0/jSensors-3.1.0-jar-with-dependencies.jar
 
 Execute jSensors and get all sensors data: 
 
@@ -154,3 +154,16 @@ When performing a request we can easily override config elements:
       [...]
       Components components = JSensors.get.config(overriddenConfig).components();
   ```
+
+## Troubleshooting ##
+
+If no components are returned, the platform backend is the place to look:
+
+* **Windows**: run the application as administrator, otherwise CPU temperature sensors are
+  not available. The bundled OpenHardwareMonitor 0.9.6 needs .NET Framework 4.5 or later.
+* **Linux**: jSensors uses `libsensors`; if it is not installed it falls back to the copy
+  bundled in the jar. Compare with the `sensors` command to see what the system reports.
+* Activate `debugMode` (or run the standalone jar with `--debug`) to log the raw data
+  returned by the backend before it is parsed.
+* Components whose type is not CPU, GPU, disk or motherboard are in
+  `components.others`, so a sensor that "disappears" may simply be there.
