@@ -101,7 +101,7 @@ On Windows the library keeps a PowerShell process open to read the sensors. Call
 
 ### Use as a standalone application ###
 
-First of all, download the JAR file containing all dependencies: https://github.com/profesorfalken/profesorfalken.github.io/raw/master/files/jSensors-2.2-jar-with-dependencies.jar
+First of all, download the JAR file containing all dependencies: https://repo1.maven.org/maven2/com/profesorfalken/jSensors/3.0.0/jSensors-3.0.0-jar-with-dependencies.jar
 
 Execute jSensors and get all sensors data: 
 
