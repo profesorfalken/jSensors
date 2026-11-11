@@ -52,33 +52,60 @@ public class WindowsSensorsManager extends SensorsManager {
         return normalizedSensorsData;
     }
 
-    private static String normalizeSensorsData(String rawSensorsData) {
+    static String normalizeSensorsData(String rawSensorsData) {
         StringBuilder normalizedSensorsData = new StringBuilder();
         String[] dataLines = rawSensorsData.split("\\r?\\n");
 
         boolean readingHardLabel = false;
         boolean readingSensor = false;
+        // Sensor blocks also have a Name property, which is not the hardware name
+        boolean inSensorBlock = false;
+        // Some hardware (motherboards) prints Name before HardwareType, others after
+        String hardwareName = null;
+
         for (final String dataLine : dataLines) {
-            if (!readingHardLabel && "HardwareType".equals(getKey(dataLine))) {
-                String hardwareType = getValue(dataLine);
-                String componentType = componentType(hardwareType);
-                if (componentType != null) {
-                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
-                    normalizedSensorsData.append(componentType).append(LINE_BREAK);
-                    // A motherboard has no Name line, so it must not wait for one
-                    readingHardLabel = !"MOBO".equals(componentType);
+            String key = getKey(dataLine);
+
+            if ("Hardware".equals(key)) {
+                inSensorBlock = true;
+            }
+
+            if ("Name".equals(key) && !inSensorBlock) {
+                hardwareName = getValue(dataLine);
+                if (readingHardLabel) {
+                    normalizedSensorsData.append("Label: ").append(hardwareName).append(LINE_BREAK);
+                    readingHardLabel = false;
+                    hardwareName = null;
                 }
                 continue;
             }
 
-            if (readingHardLabel) {
-                if ("Name".equals(getKey(dataLine))) {
-                    normalizedSensorsData.append("Label: ").append(getValue(dataLine)).append(LINE_BREAK);
-                    readingHardLabel = false;
+            if (!readingHardLabel && "HardwareType".equals(key)) {
+                String componentType = componentType(getValue(dataLine));
+
+                if (componentType != null) {
+                    normalizedSensorsData.append(COMPONENT_SEPARATOR).append(LINE_BREAK);
+                    normalizedSensorsData.append(componentType).append(LINE_BREAK);
+
+                    if (hardwareName != null && !hardwareName.isEmpty()) {
+                        normalizedSensorsData.append("Label: ").append(hardwareName).append(LINE_BREAK);
+                        readingHardLabel = false;
+                    } else {
+                        // No name seen yet: the next Name property belongs to this hardware
+                        readingHardLabel = true;
+                    }
                 }
-            } else {
-                readingSensor = addSensorsData(readingSensor, dataLine, normalizedSensorsData);
+
+                hardwareName = null;
+                inSensorBlock = false;
+                continue;
             }
+
+            if (readingHardLabel) {
+                continue;
+            }
+
+            readingSensor = addSensorsData(readingSensor, dataLine, normalizedSensorsData);
         }
 
         return normalizedSensorsData.toString();
