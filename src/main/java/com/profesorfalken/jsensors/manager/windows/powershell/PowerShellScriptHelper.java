@@ -39,9 +39,17 @@ class PowerShellScriptHelper {
 	}
 
 	private static String dllImport() {
-		return "[System.Reflection.Assembly]::LoadFile(\""
-				+ SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll") + "\")" + " | Out-Null"
-				+ LINE_BREAK;
+		StringBuilder code = new StringBuilder();
+
+		code.append("$ohmAssembly = [System.Reflection.Assembly]::LoadFile(\"")
+				.append(SensorsUtils.generateLibTmpPath("/lib/win/", "OpenHardwareMonitorLib.dll"))
+				.append("\")").append(LINE_BREAK);
+		// Reported in the debug output: without it there is no way to tell which library
+		// version produced the data when a sensor is missing
+		code.append("Write-Output (\"OpenHardwareMonitor-Version: \" + $ohmAssembly.GetName().Version)")
+				.append(LINE_BREAK);
+
+		return code.toString();
 	}
 
 	private static String newComputerInstance() {
